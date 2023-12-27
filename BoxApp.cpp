@@ -111,7 +111,9 @@ struct Transform
 	{
 		if (anyChange)
 		{
-			XMStoreFloat4x4(&mRot, XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&qRot)));
+			XMStoreFloat4x4(&matrix, 
+				XMMatrixMultiply(XMMatrixMultiply(XMLoadFloat4x4(&mPos), XMLoadFloat4x4(&mSca)), 
+					XMLoadFloat4x4(&mRot)));
 		}
 		anyChange = false;
 	}
