@@ -27,6 +27,76 @@ struct ObjectConstants
     XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
 };
 
+struct Transform
+{
+	DirectX::XMVECTOR vSca;
+	DirectX::XMMATRIX mSca;
+
+	DirectX::XMVECTOR vDir;
+	DirectX::XMVECTOR vRight;
+	DirectX::XMVECTOR vUp;
+
+	DirectX::XMVECTOR qRot;
+	DirectX::XMMATRIX mRot;
+
+	DirectX::XMVECTOR vPos;
+
+	DirectX::XMMATRIX matrix;
+
+	bool anyChange = false;
+
+	void Identity()
+	{
+		vSca = DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f);
+		mSca = DirectX::XMMatrixIdentity();
+
+		vDir = DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f);
+		vRight = DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f);
+		vUp = DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
+
+		qRot = DirectX::XMQuaternionIdentity();
+		mRot = DirectX::XMMatrixIdentity();
+
+		vPos = DirectX::XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+
+		matrix = DirectX::XMMatrixIdentity();
+
+		anyChange = true;
+	}
+
+	void TranslateLocal(float x, float y, float z)
+	{
+		vPos = vPos + vRight * x + vUp * y + vDir * z;
+
+		anyChange = true;
+	}
+	void TranslateWorld(float x, float y, float z)
+	{
+		float cX = DirectX::XMVectorGetX(vPos);
+		float cY = DirectX::XMVectorGetY(vPos);
+		float cZ = DirectX::XMVectorGetZ(vPos);
+		vPos = DirectX::XMVectorSet(cX + x, cY + y, cZ + z, 1.0f);
+
+		anyChange = true;
+	}
+
+	void Rotate(float yaw, float pitch, float roll)
+	{
+		qRot = DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll);
+
+		anyChange = true;
+	}
+
+	void ApplyChanges()
+	{
+		if (anyChange)
+		{
+			mRot = DirectX::XMMatrixRotationQuaternion(qRot);
+		}
+		anyChange = false;
+	}
+};
+
 class BoxApp : public D3DApp
 {
 public:
