@@ -175,6 +175,8 @@ private:
     float mRadius = 5.0f;
 
     POINT mLastMousePos;
+
+    std::unique_ptr<Transform> mTransform = nullptr;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
