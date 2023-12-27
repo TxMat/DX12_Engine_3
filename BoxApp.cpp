@@ -253,7 +253,9 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    mTransform.Rotate(1, 0, 0);
+    mTransform.Rotate(1, 1, 1);
+    mTransform.TranslateLocal(0, 0, 0.01f);
+    //mTransform.Rotate(0, 0, 0);
     mTransform.ApplyChanges();
     i += 0.001f;
 
@@ -264,7 +266,7 @@ void BoxApp::Update(const GameTimer& gt)
 
     // Build the view matrix.
     XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMVectorSet(mTransform.vUp.y, 0, 0, 1.0f);//XMLoadFloat3(&mTransform.vPos) + XMLoadFloat3(&mTransform.vDir);//XMVectorZero();
+    XMVECTOR target = XMLoadFloat3(&mTransform.vPos);//XMVectorZero();
     XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
     XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
