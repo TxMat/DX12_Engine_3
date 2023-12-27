@@ -92,9 +92,9 @@ struct Transform
     void Rotate(float yaw, float pitch, float roll)
     {
         XMVECTOR quatRot = XMQuaternionIdentity();
-        XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vDir), roll));
-        XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vRight), pitch));
-        XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vUp), yaw));
+        quatRot = XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vDir), roll));
+        quatRot = XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vRight), pitch));
+        quatRot = XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vUp), yaw));
 
         XMStoreFloat4(&qRot, XMQuaternionMultiply(XMLoadFloat4(&qRot), quatRot));
 
@@ -254,7 +254,7 @@ void BoxApp::OnResize()
 void BoxApp::Update(const GameTimer& gt)
 {
     mTransform.Rotate(1, 1, 1);
-    mTransform.TranslateLocal(0, 0, 0.01f);
+    //mTransform.TranslateLocal(0, 0, 0.01f);
     //mTransform.Rotate(0, 0, 0);
     mTransform.ApplyChanges();
     i += 0.001f;
@@ -266,7 +266,7 @@ void BoxApp::Update(const GameTimer& gt)
 
     // Build the view matrix.
     XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMLoadFloat3(&mTransform.vPos);//XMVectorZero();
+    XMVECTOR target = XMVectorSet(mTransform.vUp.y, 0, 0, 0);//XMVectorZero();
     XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
     XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
