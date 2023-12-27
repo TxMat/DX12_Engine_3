@@ -175,6 +175,8 @@ private:
     float mRadius = 5.0f;
 
     POINT mLastMousePos;
+
+    Transform mTransform;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -223,6 +225,8 @@ bool BoxApp::Initialize()
     BuildShadersAndInputLayout();
     BuildBoxGeometry();
     BuildPSO();
+
+    mTransform = Transform();
 
     // Execute the initialization commands.
     ThrowIfFailed(mCommandList->Close());
