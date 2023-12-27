@@ -40,6 +40,7 @@ struct Transform
 	XMFLOAT4X4 mRot;
 
 	XMFLOAT3 vPos;
+	XMFLOAT4X4 mPos;
 
 	XMFLOAT4X4 matrix;
 
@@ -47,46 +48,61 @@ struct Transform
 
 	void Identity()
 	{
-		DirectX::XMStoreFloat3(&vSca, DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f));
-		DirectX::XMStoreFloat4x4(&mSca, DirectX::XMMatrixIdentity());
+		XMStoreFloat3(&vSca, DirectX::XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f));
+		XMStoreFloat4x4(&mSca, DirectX::XMMatrixIdentity());
 
-		DirectX::XMStoreFloat3(&vDir, DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f));
-		DirectX::XMStoreFloat3(&vRight, DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
-		DirectX::XMStoreFloat3(&vUp, DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
+		XMStoreFloat3(&vDir, DirectX::XMVectorSet(0.0f, 0.0f, 1.0f, 0.0f));
+		XMStoreFloat3(&vRight, DirectX::XMVectorSet(1.0f, 0.0f, 0.0f, 0.0f));
+		XMStoreFloat3(&vUp, DirectX::XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f));
 
-		DirectX::XMStoreFloat4(&qRot, DirectX::XMQuaternionIdentity());
-		DirectX::XMStoreFloat4x4(&mRot, DirectX::XMMatrixIdentity());
+		XMStoreFloat4(&qRot, DirectX::XMQuaternionIdentity());
+		XMStoreFloat4x4(&mRot, DirectX::XMMatrixIdentity());
 
-		DirectX::XMStoreFloat3(&vPos, DirectX::XMVectorZero());
+		XMStoreFloat3(&vPos, DirectX::XMVectorZero());
 
-		DirectX::XMStoreFloat4x4(&matrix, DirectX::XMMatrixIdentity());
+		XMStoreFloat4x4(&matrix, DirectX::XMMatrixIdentity());
 
 		anyChange = true;
 	}
 
 	void TranslateLocal(float x, float y, float z)
 	{
-		DirectX::XMStoreFloat3(&vPos, 
-			DirectX::XMLoadFloat3(&vPos) + 
-			DirectX::XMLoadFloat3(&vRight) * x + 
-			DirectX::XMLoadFloat3(&vUp) * y + 
-			DirectX::XMLoadFloat3(&vDir) * z
+		XMStoreFloat3(&vPos, 
+			XMLoadFloat3(&vPos) + 
+			XMLoadFloat3(&vRight) * x + 
+			XMLoadFloat3(&vUp) * y + 
+			XMLoadFloat3(&vDir) * z
 			);
 
 		anyChange = true;
 	}
 	void TranslateWorld(float x, float y, float z)
 	{
-		DirectX::XMStoreFloat3(&vPos, DirectX::XMVectorSet(vPos.x + x, vPos.y +y, vPos.z + z, 1.0f));
+		XMStoreFloat3(&vPos, DirectX::XMVectorSet(vPos.x + x, vPos.y + y, vPos.z + z, 1.0f));
 
 		anyChange = true;
 	}
 
 	void Rotate(float yaw, float pitch, float roll)
 	{
-		DirectX::XMStoreFloat4(&qRot,
-			DirectX::XMQuaternionMultiply(
-				DirectX::XMLoadFloat4(&qRot), DirectX::XMQuaternionRotationRollPitchYaw(pitch, yaw, roll)));
+		XMVECTOR quatRot = XMQuaternionIdentity();
+		XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vDir), roll));
+		XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vRight), pitch));
+		XMQuaternionMultiply(quatRot, XMQuaternionRotationAxis(XMLoadFloat3(&vUp), yaw));
+
+		XMStoreFloat4(&qRot, XMQuaternionMultiply(XMLoadFloat4(&qRot), quatRot));
+
+		XMStoreFloat4x4(&mRot, XMMatrixRotationQuaternion(XMLoadFloat4(&qRot)));
+
+		vRight.x = mRot._11;
+		vRight.y = mRot._12;
+		vRight.z = mRot._13;
+		vUp.x = mRot._21;
+		vUp.y = mRot._22;
+		vUp.z = mRot._23;
+		vRight.x = mRot._31;
+		vRight.y = mRot._32;
+		vRight.z = mRot._33;
 
 		anyChange = true;
 	}
@@ -95,7 +111,7 @@ struct Transform
 	{
 		if (anyChange)
 		{
-			DirectX::XMStoreFloat4x4(&mRot, DirectX::XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&qRot)));
+			XMStoreFloat4x4(&mRot, XMMatrixRotationQuaternion(DirectX::XMLoadFloat4(&qRot)));
 		}
 		anyChange = false;
 	}
