@@ -463,19 +463,31 @@ void BoxApp::BuildShadersAndInputLayout()
 
 void BoxApp::BuildBoxGeometry()
 {
-    std::array<Vertex, 3> vertices =
+    std::array<Vertex, 5> vertices =
     {
-        Vertex({XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::White)}),
-        Vertex({XMFLOAT3(0, +1.0f, -1.0f), XMFLOAT4(Colors::Black)}),
-        Vertex({XMFLOAT3(+1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Red)})
+        // Base vertices
+        Vertex({XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Red)}),
+        Vertex({XMFLOAT3(+1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Green)}),
+        Vertex({XMFLOAT3(+1.0f, -1.0f, +1.0f), XMFLOAT4(Colors::Blue)}),
+        Vertex({XMFLOAT3(-1.0f, -1.0f, +1.0f), XMFLOAT4(Colors::Red)}),
+
+        // Top vertices
+        Vertex({XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT4(Colors::Yellow)}),
     };
 
-    std::array<std::uint16_t, 6> indices =
+    std::array<std::uint16_t, 18> indices =
     {
-        // front face
+        // Base indices
         0, 1, 2,
-        2, 1, 0
+        0, 2, 3,
+
+        // Top indices
+        4, 1, 0,
+        4, 2, 1,
+        4, 3, 2,
+        4, 0, 3,
     };
+
 
     constexpr UINT vbByteSize = static_cast<UINT>(vertices.size()) * sizeof(Vertex);
     constexpr UINT ibByteSize = static_cast<UINT>(indices.size()) * sizeof(std::uint16_t);
