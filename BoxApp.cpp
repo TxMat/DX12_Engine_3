@@ -46,6 +46,11 @@ struct Transform
 
     bool anyChange = false;
 
+    Transform()
+    {
+        Identity();
+    }
+
     void Identity()
     {
         XMStoreFloat3(&vSca, XMVectorSet(1.0f, 1.0f, 1.0f, 0.0f));
