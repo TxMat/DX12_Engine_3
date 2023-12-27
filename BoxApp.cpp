@@ -148,7 +148,7 @@ private:
     void BuildConstantBuffers();
     void BuildRootSignature();
     void BuildShadersAndInputLayout();
-    void BuildBoxGeometry();
+    void BuildHolyPrismGeometry();
     void BuildPSO();
 
 private:
@@ -223,7 +223,7 @@ bool BoxApp::Initialize()
     BuildConstantBuffers();
     BuildRootSignature();
     BuildShadersAndInputLayout();
-    BuildBoxGeometry();
+    BuildHolyPrismGeometry();
     BuildPSO();
 
     mTransform = Transform();
@@ -465,7 +465,7 @@ void BoxApp::BuildShadersAndInputLayout()
     };
 }
 
-void BoxApp::BuildBoxGeometry()
+void BoxApp::BuildHolyPrismGeometry()
 {
     std::array<Vertex, 5> vertices =
     {
