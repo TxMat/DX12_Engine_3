@@ -148,8 +148,11 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    
-    mTransform.Rotate(gt.DeltaTime(), 0, gt.DeltaTime()/3);
+    float dt = gt.DeltaTime();
+    float yaw = dt;
+    float pitch = 0;
+    float roll = dt * .1; 
+    mTransform.Rotate(yaw, pitch, roll);
     //mTransform.TranslateLocal(0, 0, 0);
     mTransform.ApplyChanges();
 
