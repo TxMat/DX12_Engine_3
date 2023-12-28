@@ -36,7 +36,8 @@ void Shader::Draw(ID3D12GraphicsCommandList* cmdList, UINT indexCount)
     cmdList->DrawIndexedInstanced(indexCount, 1, 0, 0, 0);
 }
 
-void Shader::BuildPSO()
+void Shader::BuildPSO(ComPtr<ID3D12Device> md3dDevice, 
+    DXGI_FORMAT backBufferFormat, bool m4xMsaaState, int m4xMsaaQuality, DXGI_FORMAT depthStencilFormat)
 {
     D3D12_GRAPHICS_PIPELINE_STATE_DESC psoDesc;
     ZeroMemory(&psoDesc, sizeof(D3D12_GRAPHICS_PIPELINE_STATE_DESC));
@@ -44,13 +45,13 @@ void Shader::BuildPSO()
     psoDesc.pRootSignature = mRootSignature.Get();
     psoDesc.VS =
     {
-        reinterpret_cast<BYTE*>(mvsByteCode->GetBufferPointer()),
-        mvsByteCode->GetBufferSize()
+        reinterpret_cast<BYTE*>(mVSByteCode->GetBufferPointer()),
+        mVSByteCode->GetBufferSize()
     };
     psoDesc.PS =
     {
-        reinterpret_cast<BYTE*>(mpsByteCode->GetBufferPointer()),
-        mpsByteCode->GetBufferSize()
+        reinterpret_cast<BYTE*>(mPSByteCode->GetBufferPointer()),
+        mPSByteCode->GetBufferSize()
     };
     psoDesc.RasterizerState = CD3DX12_RASTERIZER_DESC(D3D12_DEFAULT);
     psoDesc.BlendState = CD3DX12_BLEND_DESC(D3D12_DEFAULT);
@@ -58,9 +59,9 @@ void Shader::BuildPSO()
     psoDesc.SampleMask = UINT_MAX;
     psoDesc.PrimitiveTopologyType = D3D12_PRIMITIVE_TOPOLOGY_TYPE_TRIANGLE;
     psoDesc.NumRenderTargets = 1;
-    psoDesc.RTVFormats[0] = mBackBufferFormat;
+    psoDesc.RTVFormats[0] = backBufferFormat;
     psoDesc.SampleDesc.Count = m4xMsaaState ? 4 : 1;
     psoDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
-    psoDesc.DSVFormat = mDepthStencilFormat;
+    psoDesc.DSVFormat = depthStencilFormat;
     ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&mPSO)));
 }

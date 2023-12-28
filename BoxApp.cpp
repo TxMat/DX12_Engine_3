@@ -42,7 +42,6 @@ private:
 
     void BuildDescriptorHeaps();
     void BuildConstantBuffers();
-    void BuildObjectConstantBuffer(Object& obj);
     void BuildRootSignature();
     void BuildShadersAndInputLayout();
     void BuildHolyPrismGeometry();
@@ -169,14 +168,14 @@ void BoxApp::Update(const GameTimer& gt)
     XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
     XMStoreFloat4x4(&mView, view);
 
-    XMMATRIX world = XMLoadFloat4x4(&mTransform.matrix);//XMLoadFloat4x4(&mWorld);
+    //XMMATRIX world = XMLoadFloat4x4(&mWorld);
     XMMATRIX proj = XMLoadFloat4x4(&mProj);
-    XMMATRIX worldViewProj = world * view * proj;
+    XMMATRIX viewProj = view * proj;
 
     // Update the constant buffer with the latest worldViewProj matrix.
     ObjectConstants objConstants;
-    XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(worldViewProj));
-    mObjectCB->CopyData(0, objConstants);
+    XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(viewProj));
+    mViewCB->CopyData(0, objConstants);
 }
 
 void BoxApp::Draw(const GameTimer& gt)
@@ -216,7 +215,7 @@ void BoxApp::Draw(const GameTimer& gt)
     //mCommandList->SetGraphicsRootConstantBufferView(0, );
     
     // Replace by Mesh.Draw
-    mMesh.Draw(mCommandList);
+    //mMesh.Draw(mCommandList);
     
     // Replace by mShader->Draw
     //mShader->Draw(mCommandList.Get(), mBoxGeo->DrawArgs["box"].IndexCount);
@@ -324,24 +323,6 @@ void BoxApp::BuildConstantBuffers()
     //md3dDevice->CreateConstantBufferView(
     //    &cbvDesc,
     //    mCbvHeap->GetCPUDescriptorHandleForHeapStart());
-}
-void BoxApp::BuildObjectConstantBuffer(Object& obj)
-{
-    obj.mObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
-
-    UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
-
-    D3D12_GPU_VIRTUAL_ADDRESS cbAddress = obj.mObjectCB->Resource()->GetGPUVirtualAddress();
-    // Offset to the ith object constant buffer in the buffer.
-    cbAddress += obj.mObjectIndex * objCBByteSize;
-
-    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
-    cbvDesc.BufferLocation = cbAddress;
-    cbvDesc.SizeInBytes = objCBByteSize;
-
-    md3dDevice->CreateConstantBufferView(
-        &cbvDesc,
-        mCbvHeap->GetCPUDescriptorHandleForHeapStart());
 }
 
 void BoxApp::BuildRootSignature()
