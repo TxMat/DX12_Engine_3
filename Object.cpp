@@ -1,10 +1,5 @@
 ﻿#include "Object.h"
 
-Object::Object()
-{
-    
-}
-
 void Object::Update(const GameTimer& gt)
 {
     
