@@ -55,6 +55,10 @@ struct Transform
                       XMLoadFloat3(&vUp) * y +
                       XMLoadFloat3(&vDir) * z
         );
+        XMStoreFloat4x4(&mPos, XMMatrixTranslationFromVector(
+            XMLoadFloat3(&vRight) * x +
+            XMLoadFloat3(&vUp) * y +
+            XMLoadFloat3(&vDir) * z));
 
         anyChange = true;
     }
@@ -62,6 +66,7 @@ struct Transform
     void TranslateWorld(float x, float y, float z)
     {
         XMStoreFloat3(&vPos, XMVectorSet(vPos.x + x, vPos.y + y, vPos.z + z, 1.0f));
+        XMStoreFloat4x4(&mPos, XMMatrixTranslation(x, y, z));
 
         anyChange = true;
     }
@@ -88,11 +93,6 @@ struct Transform
         vDir.z = mRot._33;
 
         anyChange = true;
-    }
-
-    XMVECTOR TransformVector(XMVECTOR vector)
-    {
-        return XMVector3Transform(vector, XMLoadFloat4x4(&matrix));
     }
 
     void ApplyChanges()
