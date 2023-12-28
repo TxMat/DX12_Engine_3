@@ -75,7 +75,6 @@ private:
 
     POINT mLastMousePos;
 
-    Transform mTransform;
     Mesh mMesh;
     Shader mShader;
     Object* mObject;
@@ -131,8 +130,6 @@ bool BoxApp::Initialize()
     BuildShaders();
     BuildObjects();
 
-    mTransform = Transform();
-
     // Execute the initialization commands.
     ThrowIfFailed(mCommandList->Close());
     ID3D12CommandList* cmdsLists[] = {mCommandList.Get()};
@@ -155,14 +152,6 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    float dt = gt.DeltaTime();
-    float yaw = dt;
-    float pitch = 0;
-    float roll = 0;
-    mTransform.Rotate(yaw, pitch, roll);
-    //mTransform.TranslateLocal(0, 0, 0);
-    mTransform.ApplyChanges();
-
     // Convert Spherical to Cartesian coordinates.
     float x = mRadius * sinf(mPhi) * cosf(mTheta);
     float z = mRadius * sinf(mPhi) * sinf(mTheta);
