@@ -146,7 +146,7 @@
         <ClCompile Include="Common\MathHelper.cpp"/>
         <ClCompile Include="BoxApp.cpp"/>
         <ClCompile Include="Object.cpp" />
-        <ClCompile Include="Vertex.cpp" />
+        <ClCompile Include="Mesh.cpp" />
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="Common\d3dApp.h"/>
@@ -157,6 +157,7 @@
         <ClInclude Include="Object.h" />
         <ClInclude Include="Tranform.h" />
         <ClInclude Include="Vertex.h" />
+        <ClInclude Include="Mesh.h" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">
