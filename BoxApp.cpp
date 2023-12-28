@@ -253,7 +253,7 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    mTransform.Rotate(0, 0.01f, 0);
+    mTransform.Rotate(0, gt.DeltaTime(), 0);
     //mTransform.TranslateLocal(0, 0, 0.01f);
     //mTransform.Rotate(0, 0, 0);
     mTransform.ApplyChanges();
