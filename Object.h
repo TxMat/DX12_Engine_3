@@ -3,5 +3,5 @@
 class Object
 {
 public:
-    Transform
+    //Transform
 };

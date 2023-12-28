@@ -11,6 +11,7 @@
 #include "Common/d3dApp.h"
 #include "Common/MathHelper.h"
 #include "Common/UploadBuffer.h"
+#include "Tranform.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -152,7 +153,7 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    mTransform.Rotate(0, gt.DeltaTime(), 0);
+    mTransform.Rotate(gt.DeltaTime(), 0, 0);
     mTransform.ApplyChanges();
 
     // Convert Spherical to Cartesian coordinates.
@@ -162,13 +163,13 @@ void BoxApp::Update(const GameTimer& gt)
 
     // Build the view matrix.
     XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMVectorSet(mTransform.vUp.y, 0, 0, 0);
+    XMVECTOR target = XMVectorZero();
     XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
     XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
     XMStoreFloat4x4(&mView, view);
 
-    XMMATRIX world = XMLoadFloat4x4(&mWorld);
+    XMMATRIX world = XMLoadFloat4x4(&mTransform.matrix);//XMLoadFloat4x4(&mWorld);
     XMMATRIX proj = XMLoadFloat4x4(&mProj);
     XMMATRIX worldViewProj = world * view * proj;
 

@@ -40,6 +40,7 @@ struct Transform
         XMStoreFloat4x4(&mRot, XMMatrixIdentity());
 
         XMStoreFloat3(&vPos, XMVectorZero());
+        XMStoreFloat4x4(&mPos, XMMatrixIdentity());
 
         XMStoreFloat4x4(&matrix, XMMatrixIdentity());
 
@@ -98,9 +99,7 @@ struct Transform
     {
         if (anyChange)
         {
-            XMStoreFloat4x4(&matrix,
-                            XMMatrixMultiply(XMMatrixMultiply(XMLoadFloat4x4(&mSca), XMLoadFloat4x4(&mRot)),
-                                             XMLoadFloat4x4(&mPos)));
+            XMStoreFloat4x4(&matrix, XMLoadFloat4x4(&mSca) * XMLoadFloat4x4(&mRot) * XMLoadFloat4x4(&mPos));
         }
         anyChange = false;
     }
