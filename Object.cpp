@@ -4,18 +4,12 @@ void Object::Update(const GameTimer& gt)
 {
 }
 
-Object::Object(): mMesh(), mShader()
+Object::Object(Mesh& mesh, Shader& shader, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
 {
     mTransform = Transform();
 
     mObjectIndex = objectNumber;
     objectNumber++;
-}
-
-void Object::Init(Mesh& mesh, Shader& shader, ComPtr<ID3D12Device> md3dDevice)
-{
-    mMesh = mesh;
-    mShader = shader;
 
     BuildConstantBuffer(md3dDevice);
 }
