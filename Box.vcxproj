@@ -145,6 +145,7 @@
         <ClCompile Include="Common\GameTimer.cpp"/>
         <ClCompile Include="Common\MathHelper.cpp"/>
         <ClCompile Include="BoxApp.cpp"/>
+        <ClCompile Include="Object.cpp" />
     </ItemGroup>
     <ItemGroup>
         <ClInclude Include="Common\d3dApp.h"/>
@@ -152,6 +153,8 @@
         <ClInclude Include="Common\GameTimer.h"/>
         <ClInclude Include="Common\MathHelper.h"/>
         <ClInclude Include="Common\UploadBuffer.h"/>
+        <ClInclude Include="Object.h" />
+        <ClInclude Include="Tranform.h" />
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">
