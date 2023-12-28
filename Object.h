@@ -17,9 +17,6 @@ public:
 
     unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
 
-    static int objectNumber;
-    int mObjectIndex;
-
     void BuildConstantBuffer(ComPtr<ID3D12Device> md3dDevice);
     void Update(const GameTimer& gt);
     void Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList);
