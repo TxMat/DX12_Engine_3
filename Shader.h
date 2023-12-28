@@ -16,6 +16,7 @@ public:
     Microsoft::WRL::ComPtr<ID3DBlob> GetVSByteCode() const;
     Microsoft::WRL::ComPtr<ID3DBlob> GetPSByteCode() const;
     void Draw(ID3D12GraphicsCommandList* cmdList, UINT indexCount);
+    void BuildPSO();
 
 private:
     Microsoft::WRL::ComPtr<ID3DBlob> mVSByteCode;
