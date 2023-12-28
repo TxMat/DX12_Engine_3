@@ -77,7 +77,10 @@ private:
 
     Mesh mMesh;
     Shader mShader;
-    Object* mObject;
+    Object* mObject1;
+    Object* mObject2;
+    Object* mObject3;
+    Object* mObject4;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -110,7 +113,10 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 
 BoxApp::~BoxApp()
 {
-    delete mObject;
+    delete mObject1;
+    delete mObject2;
+    delete mObject3;
+    delete mObject4;
 }
 
 bool BoxApp::Initialize()
@@ -175,7 +181,10 @@ void BoxApp::Update(const GameTimer& gt)
     XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(viewProj));
     mViewCB->CopyData(0, objConstants);
 
-    mObject->Update(gt);
+    mObject1->Update(gt);
+    mObject2->Update(gt);
+    mObject3->Update(gt);
+    mObject4->Update(gt);
 }
 
 void BoxApp::Draw(const GameTimer& gt)
@@ -207,7 +216,10 @@ void BoxApp::Draw(const GameTimer& gt)
     ID3D12DescriptorHeap* descriptorHeaps[] = {mCbvHeap.Get()};
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
-    mObject->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+    mObject1->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+    mObject2->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+    mObject3->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+    mObject4->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
 
     //mCommandList->SetGraphicsRootConstantBufferView(1, mViewCB->Resource()->GetGPUVirtualAddress());
     //mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
@@ -453,5 +465,8 @@ void BoxApp::BuildShaders()
 }
 void BoxApp::BuildObjects()
 {
-    mObject = new Object(mMesh, mShader, XMFLOAT3(0.0f, 0.0f, 0.0f), md3dDevice);
+    mObject1 = new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 2.0f), md3dDevice);
+    mObject2 = new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 2.0f), md3dDevice);
+    mObject3 = new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 0.0f), md3dDevice);
+    mObject4 = new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 0.0f), md3dDevice);
 }
