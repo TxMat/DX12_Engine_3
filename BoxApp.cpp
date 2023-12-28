@@ -15,15 +15,11 @@
 #include "Vertex.h"
 #include "Mesh.h"
 #include "Object.h"
+#include "ObjectConstants.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
-
-struct ObjectConstants
-{
-    XMFLOAT4X4 WorldViewProj = MathHelper::Identity4x4();
-};
 
 class BoxApp : public D3DApp
 {

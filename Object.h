@@ -3,6 +3,7 @@
 #include "Tranform.h"
 #include "Common/d3dApp.h"
 #include "Common/UploadBuffer.h"
+#include "ObjectConstants.h"
 
 class Object
 {
