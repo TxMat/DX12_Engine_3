@@ -10,6 +10,7 @@
 class Shader
 {
 public:
+    Shader();
     Shader(const std::wstring& vertexShaderPath, const std::wstring& pixelShaderPath);
     ~Shader();
 

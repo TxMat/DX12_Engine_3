@@ -1,5 +1,9 @@
 ﻿#include "Shader.h"
 
+Shader::Shader()
+{
+}
+
 Shader::Shader(const std::wstring& vertexShaderPath, const std::wstring& pixelShaderPath)
 {
     mVSByteCode = d3dUtil::CompileShader(vertexShaderPath, nullptr, "VS", "vs_5_0");
