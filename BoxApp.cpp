@@ -47,6 +47,10 @@ private:
     void BuildHolyPrismGeometry();
     void BuildPSO();
 
+    void BuildMeshes();
+    void BuildShaders();
+    void BuildObjects();
+
 private:
     ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
     ComPtr<ID3D12DescriptorHeap> mCbvHeap = nullptr;
@@ -74,6 +78,8 @@ private:
 
     Transform mTransform;
     Mesh mMesh;
+    Shader mShader;
+    Object mObject;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -381,32 +387,7 @@ void BoxApp::BuildShadersAndInputLayout()
 
 void BoxApp::BuildHolyPrismGeometry()
 {
-    vector<Vertex> vertices =
-    {
-        // Base vertices
-        Vertex({XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Red)}),
-        Vertex({XMFLOAT3(+1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Green)}),
-        Vertex({XMFLOAT3(+1.0f, -1.0f, +1.0f), XMFLOAT4(Colors::Blue)}),
-        Vertex({XMFLOAT3(-1.0f, -1.0f, +1.0f), XMFLOAT4(Colors::Red)}),
-
-        // Top vertices
-        Vertex({XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT4(Colors::Yellow)}),
-    };
-
-    vector<std::uint16_t> indices =
-    {
-        // Base indices
-        0, 1, 2,
-        0, 2, 3,
-
-        // Top indices
-        4, 1, 0,
-        4, 2, 1,
-        4, 3, 2,
-        4, 0, 3,
-    };
-
-    mMesh.Create(vertices, indices, md3dDevice, mCommandList);
+    
 
     //const SIZE_T vbByteSize = vertices.size() * sizeof(Vertex);
     //constexpr UINT ibByteSize = static_cast<UINT>(indices.size()) * sizeof(std::uint16_t);
@@ -468,4 +449,42 @@ void BoxApp::BuildPSO()
     psoDesc.SampleDesc.Quality = m4xMsaaState ? (m4xMsaaQuality - 1) : 0;
     psoDesc.DSVFormat = mDepthStencilFormat;
     ThrowIfFailed(md3dDevice->CreateGraphicsPipelineState(&psoDesc, IID_PPV_ARGS(&mPSO)));
+}
+
+void BoxApp::BuildMeshes()
+{
+    vector<Vertex> vertices =
+    {
+        // Base vertices
+        Vertex({XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Red)}),
+        Vertex({XMFLOAT3(+1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Green)}),
+        Vertex({XMFLOAT3(+1.0f, -1.0f, +1.0f), XMFLOAT4(Colors::Blue)}),
+        Vertex({XMFLOAT3(-1.0f, -1.0f, +1.0f), XMFLOAT4(Colors::Red)}),
+
+        // Top vertices
+        Vertex({XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT4(Colors::Yellow)}),
+    };
+
+    vector<std::uint16_t> indices =
+    {
+        // Base indices
+        0, 1, 2,
+        0, 2, 3,
+
+        // Top indices
+        4, 1, 0,
+        4, 2, 1,
+        4, 3, 2,
+        4, 0, 3,
+    };
+
+    mMesh.Create(vertices, indices, md3dDevice, mCommandList);
+}
+void BoxApp::BuildShaders()
+{
+    
+}
+void BoxApp::BuildObjects()
+{
+
 }
