@@ -13,6 +13,7 @@
 #include "Common/UploadBuffer.h"
 #include "Tranform.h"
 #include "Vertex.h"
+#include "Mesh.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -75,6 +76,7 @@ private:
     POINT mLastMousePos;
 
     Transform mTransform;
+    Mesh *mMesh = nullptr;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -209,16 +211,18 @@ void BoxApp::Draw(const GameTimer& gt)
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
     mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
-
-    mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
-    mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
     mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap->GetGPUDescriptorHandleForHeapStart());
 
-    mCommandList->DrawIndexedInstanced(
-        mBoxGeo->DrawArgs["box"].IndexCount,
-        1, 0, 0, 0);
+    // Replace by Mesh.Draw
+    //mMesh->Draw(mCommandList);
+    //mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
+    //mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
+    //
+    //mCommandList->DrawIndexedInstanced(
+    //    mBoxGeo->DrawArgs["box"].IndexCount,
+    //    1, 0, 0, 0);
 
     // Indicate a state transition on the resource usage.
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -373,7 +377,7 @@ void BoxApp::BuildShadersAndInputLayout()
 
 void BoxApp::BuildHolyPrismGeometry()
 {
-    std::array<Vertex, 5> vertices =
+    vector<Vertex> vertices =
     {
         // Base vertices
         Vertex({XMFLOAT3(-1.0f, -1.0f, -1.0f), XMFLOAT4(Colors::Red)}),
@@ -385,7 +389,7 @@ void BoxApp::BuildHolyPrismGeometry()
         Vertex({XMFLOAT3(0.0f, +1.0f, 0.0f), XMFLOAT4(Colors::Yellow)}),
     };
 
-    std::array<std::uint16_t, 18> indices =
+    vector<std::uint16_t> indices =
     {
         // Base indices
         0, 1, 2,
@@ -398,38 +402,39 @@ void BoxApp::BuildHolyPrismGeometry()
         4, 0, 3,
     };
 
+    mMesh = &Mesh(vertices, indices, md3dDevice, mCommandList);
 
-    constexpr UINT vbByteSize = static_cast<UINT>(vertices.size()) * sizeof(Vertex);
-    constexpr UINT ibByteSize = static_cast<UINT>(indices.size()) * sizeof(std::uint16_t);
-
-    mBoxGeo = std::make_unique<MeshGeometry>();
-    mBoxGeo->Name = "boxGeo";
-
-    ThrowIfFailed(D3DCreateBlob(vbByteSize, &mBoxGeo->VertexBufferCPU));
-    CopyMemory(mBoxGeo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
-
-    ThrowIfFailed(D3DCreateBlob(ibByteSize, &mBoxGeo->IndexBufferCPU));
-    CopyMemory(mBoxGeo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
-
-    mBoxGeo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
-                                                            mCommandList.Get(), vertices.data(), vbByteSize,
-                                                            mBoxGeo->VertexBufferUploader);
-
-    mBoxGeo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
-                                                           mCommandList.Get(), indices.data(), ibByteSize,
-                                                           mBoxGeo->IndexBufferUploader);
-
-    mBoxGeo->VertexByteStride = sizeof(Vertex);
-    mBoxGeo->VertexBufferByteSize = vbByteSize;
-    mBoxGeo->IndexFormat = DXGI_FORMAT_R16_UINT;
-    mBoxGeo->IndexBufferByteSize = ibByteSize;
-
-    SubmeshGeometry submesh;
-    submesh.IndexCount = static_cast<UINT>(indices.size());
-    submesh.StartIndexLocation = 0;
-    submesh.BaseVertexLocation = 0;
-
-    mBoxGeo->DrawArgs["box"] = submesh;
+    //const SIZE_T vbByteSize = vertices.size() * sizeof(Vertex);
+    //constexpr UINT ibByteSize = static_cast<UINT>(indices.size()) * sizeof(std::uint16_t);
+    //
+    //mBoxGeo = std::make_unique<MeshGeometry>();
+    //mBoxGeo->Name = "boxGeo";
+    //
+    //ThrowIfFailed(D3DCreateBlob(vbByteSize, &mBoxGeo->VertexBufferCPU));
+    //CopyMemory(mBoxGeo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
+    //
+    //ThrowIfFailed(D3DCreateBlob(ibByteSize, &mBoxGeo->IndexBufferCPU));
+    //CopyMemory(mBoxGeo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
+    //
+    //mBoxGeo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
+    //                                                        mCommandList.Get(), vertices.data(), vbByteSize,
+    //                                                        mBoxGeo->VertexBufferUploader);
+    //
+    //mBoxGeo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
+    //                                                       mCommandList.Get(), indices.data(), ibByteSize,
+    //                                                       mBoxGeo->IndexBufferUploader);
+    //
+    //mBoxGeo->VertexByteStride = sizeof(Vertex);
+    //mBoxGeo->VertexBufferByteSize = vbByteSize;
+    //mBoxGeo->IndexFormat = DXGI_FORMAT_R16_UINT;
+    //mBoxGeo->IndexBufferByteSize = ibByteSize;
+    //
+    //SubmeshGeometry submesh;
+    //submesh.IndexCount = static_cast<UINT>(indices.size());
+    //submesh.StartIndexLocation = 0;
+    //submesh.BaseVertexLocation = 0;
+    //
+    //mBoxGeo->DrawArgs["box"] = submesh;
 }
 
 void BoxApp::BuildPSO()
