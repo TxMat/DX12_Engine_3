@@ -14,6 +14,7 @@
 #include "Tranform.h"
 #include "Vertex.h"
 #include "Mesh.h"
+#include "Object.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -45,6 +46,7 @@ private:
 
     void BuildDescriptorHeaps();
     void BuildConstantBuffers();
+    void BuildObjectConstantBuffer(Object& obj);
     void BuildRootSignature();
     void BuildShadersAndInputLayout();
     void BuildHolyPrismGeometry();
@@ -312,6 +314,24 @@ void BoxApp::BuildConstantBuffers()
     // Offset to the ith object constant buffer in the buffer.
     int boxCBufIndex = 0;
     cbAddress += boxCBufIndex * objCBByteSize;
+
+    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+    cbvDesc.BufferLocation = cbAddress;
+    cbvDesc.SizeInBytes = objCBByteSize;
+
+    md3dDevice->CreateConstantBufferView(
+        &cbvDesc,
+        mCbvHeap->GetCPUDescriptorHandleForHeapStart());
+}
+void BoxApp::BuildObjectConstantBuffer(Object& obj)
+{
+    obj.mObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
+
+    UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
+
+    D3D12_GPU_VIRTUAL_ADDRESS cbAddress = obj.mObjectCB->Resource()->GetGPUVirtualAddress();
+    // Offset to the ith object constant buffer in the buffer.
+    cbAddress += obj.mObjectIndex * objCBByteSize;
 
     D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
     cbvDesc.BufferLocation = cbAddress;

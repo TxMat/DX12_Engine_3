@@ -1,6 +1,8 @@
 ﻿#pragma once
 #include "Mesh.h"
 #include "Tranform.h"
+#include "Common/d3dApp.h"
+#include "Common/UploadBuffer.h"
 
 class Object
 {
@@ -9,10 +11,18 @@ public:
         : mMesh(m_mesh)
     {
         mTransform = Transform();
+
+        mObjectIndex = objectNumber;
+        objectNumber++;
     }
 
     Transform mTransform;
     Mesh& mMesh;
+
+    unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
+
+    static int objectNumber;
+    int mObjectIndex;
 
     void Update(const GameTimer& gt);
     
