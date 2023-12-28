@@ -9,14 +9,9 @@
 class Object
 {
 public:
-    explicit Object(Mesh& m_mesh)
-        : mMesh(m_mesh)
-    {
-        mTransform = Transform();
+    Object();
 
-        mObjectIndex = objectNumber;
-        objectNumber++;
-    }
+    void Init(Mesh& mesh, Shader& shader, ComPtr<ID3D12Device> md3dDevice);
 
     Transform mTransform;
     Mesh& mMesh;
