@@ -124,7 +124,7 @@ bool BoxApp::Initialize()
 
     BuildDescriptorHeaps();
     BuildConstantBuffers();
-    BuildRootSignature();
+    //BuildRootSignature();
     //BuildShadersAndInputLayout();
     //BuildHolyPrismGeometry();
     //BuildPSO();
