@@ -23,7 +23,7 @@ void Object::BuildConstantBuffer(ComPtr<ID3D12Device> md3dDevice)
     mObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
 }
 
-void Object::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList)
+void Object::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRTUAL_ADDRESS add)
 {
     mCommandList->IASetVertexBuffers(0, 1, &mMesh.mGeometry->VertexBufferView());
     mCommandList->IASetIndexBuffer(&mMesh.mGeometry->IndexBufferView());
@@ -32,6 +32,7 @@ void Object::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList)
 
     mCommandList->SetGraphicsRootSignature(mShader.mRootSignature.Get());
     mCommandList->SetGraphicsRootConstantBufferView(0, mObjectCB->Resource()->GetGPUVirtualAddress());
+    mCommandList->SetGraphicsRootConstantBufferView(1, add);
 
     mCommandList->SetPipelineState(mShader.mPSO.Get());
 

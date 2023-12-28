@@ -19,5 +19,5 @@ public:
 
     void BuildConstantBuffer(ComPtr<ID3D12Device> md3dDevice);
     void Update(const GameTimer& gt);
-    void Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList);
+    void Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRTUAL_ADDRESS add);
 };

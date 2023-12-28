@@ -206,9 +206,11 @@ void BoxApp::Draw(const GameTimer& gt)
 
     ID3D12DescriptorHeap* descriptorHeaps[] = {mCbvHeap.Get()};
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-    mCommandList->SetGraphicsRootConstantBufferView(1, mViewCB->Resource()->GetGPUVirtualAddress());
+    
 
-    mObject->Draw(mCommandList);
+    mObject->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+
+    //mCommandList->SetGraphicsRootConstantBufferView(1, mViewCB->Resource()->GetGPUVirtualAddress());
     //mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
     //mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
