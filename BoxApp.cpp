@@ -482,6 +482,9 @@ void BoxApp::BuildMeshes()
 }
 void BoxApp::BuildShaders()
 {
+
+    mShader = Shader(L"Shaders\\color.hlsl", L"Shaders\\color.hlsl");
+    mShader.Init(md3dDevice, mBackBufferFormat, m4xMsaaState, m4xMsaaQuality, mDepthStencilFormat);
     
 }
 void BoxApp::BuildObjects()
