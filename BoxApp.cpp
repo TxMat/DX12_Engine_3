@@ -235,7 +235,14 @@ void BoxApp::Draw(const GameTimer& gt)
                                                                            D3D12_RESOURCE_STATE_PRESENT));
 
     // Done recording commands.
-    ThrowIfFailed(mCommandList->Close());
+    HRESULT hr = mCommandList->Close();
+    if (hr == DXGI_ERROR_DEVICE_REMOVED)
+    {
+        hr = md3dDevice->GetDeviceRemovedReason();
+        OutputDebugStringA("Device Removed Reason: ");
+        OutputDebugStringA(std::to_string(hr).c_str());
+    }
+    ThrowIfFailed(hr);
 
     // Add the command list to the queue for execution.
     ID3D12CommandList* cmdsLists[] = {mCommandList.Get()};

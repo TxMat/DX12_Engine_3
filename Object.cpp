@@ -2,8 +2,8 @@
 
 void Object::Update(const GameTimer& gt)
 {
-    mTransform.Rotate(gt.DeltaTime(), 0, 0);
-    mTransform.TranslateWorld(gt.DeltaTime(), 0, 0);
+    //mTransform.Rotate(gt.DeltaTime(), 0, 0);
+    mTransform.TranslateWorld(0, 0, gt.DeltaTime());
     mTransform.ApplyChanges();
 
     ObjectConstants objConstants;

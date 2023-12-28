@@ -47,26 +47,21 @@ struct Transform
         anyChange = true;
     }
 
-    void TranslateLocal(float x, float y, float z)
+    void Transform::TranslateLocal(float x, float y, float z)
     {
-        XMStoreFloat3(&vPos,
-                      XMLoadFloat3(&vPos) +
-                      XMLoadFloat3(&vRight) * x +
-                      XMLoadFloat3(&vUp) * y +
-                      XMLoadFloat3(&vDir) * z
-        );
-        XMStoreFloat4x4(&mPos, XMMatrixTranslationFromVector(
-            XMLoadFloat3(&vRight) * x +
-            XMLoadFloat3(&vUp) * y +
-            XMLoadFloat3(&vDir) * z));
+        XMVECTOR displacement = XMLoadFloat3(&vRight) * x +
+                                XMLoadFloat3(&vUp) * y +
+                                XMLoadFloat3(&vDir) * z;
+        XMStoreFloat3(&vPos, XMLoadFloat3(&vPos) + displacement);
+        XMStoreFloat4x4(&mPos, XMMatrixTranslationFromVector(XMLoadFloat3(&vPos)));
 
         anyChange = true;
     }
 
-    void TranslateWorld(float x, float y, float z)
+    void Transform::TranslateWorld(float x, float y, float z)
     {
-        XMStoreFloat3(&vPos, XMVectorSet(vPos.x + x, vPos.y + y, vPos.z + z, 1.0f));
-        XMStoreFloat4x4(&mPos, XMMatrixTranslation(x, y, z));
+        XMStoreFloat3(&vPos, XMLoadFloat3(&vPos) + XMVectorSet(x, y, z, 0.0f));
+        XMStoreFloat4x4(&mPos, XMMatrixTranslationFromVector(XMLoadFloat3(&vPos)));
 
         anyChange = true;
     }
