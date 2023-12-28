@@ -110,6 +110,7 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 
 BoxApp::~BoxApp()
 {
+    delete mObject;
 }
 
 bool BoxApp::Initialize()
