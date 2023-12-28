@@ -334,14 +334,13 @@ void BoxApp::BuildRootSignature()
     // thought of as defining the function signature.  
 
     // Root parameter can be a table, root descriptor or root constants.
-    CD3DX12_ROOT_PARAMETER slotRootParameter[2];
+    CD3DX12_ROOT_PARAMETER slotRootParameter[1];
 
     // Create a single descriptor table of CBVs.
     //CD3DX12_DESCRIPTOR_RANGE cbvTable;
     //cbvTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
     //slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable);
-    slotRootParameter[0].InitAsConstantBufferView(0);
-    slotRootParameter[1].InitAsConstantBufferView(1);
+    slotRootParameter[0].InitAsConstantBufferView(1);
 
     // A root signature is an array of root parameters.
     CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(1, slotRootParameter, 0, nullptr,

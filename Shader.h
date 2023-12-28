@@ -20,6 +20,10 @@ public:
     ComPtr<ID3DBlob> GetVSByteCode() const;
     ComPtr<ID3DBlob> GetPSByteCode() const;
     void Draw(ID3D12GraphicsCommandList* cmdList, UINT indexCount);
+    void Init(ComPtr<ID3D12Device> md3dDevice,
+        DXGI_FORMAT backBufferFormat, bool m4xMsaaState, int m4xMsaaQuality, DXGI_FORMAT depthStencilFormat);
+    void BuildRootSignature(ComPtr<ID3D12Device> md3dDevice);
+    void BuildShadersAndInputLayout();
     void BuildPSO(ComPtr<ID3D12Device> md3dDevice,
         DXGI_FORMAT backBufferFormat, bool m4xMsaaState, int m4xMsaaQuality, DXGI_FORMAT depthStencilFormat);
 
