@@ -3,6 +3,7 @@
 void Object::Update(const GameTimer& gt)
 {
     mTransform.Rotate(gt.DeltaTime(), 0, 0);
+    mTransform.TranslateLocal(gt.DeltaTime(), 0, 0);
     mTransform.ApplyChanges();
 
     ObjectConstants objConstants;
@@ -11,9 +12,11 @@ void Object::Update(const GameTimer& gt)
     mObjectCB->CopyData(0, objConstants);
 }
 
-Object::Object(Mesh& mesh, Shader& shader, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
+Object::Object(Mesh& mesh, Shader& shader, XMFLOAT3 startPos, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
 {
     mTransform = Transform();
+    mTransform.TranslateLocal(startPos.x, startPos.y, startPos.z);
+    mTransform.ApplyChanges();
 
     BuildConstantBuffer(md3dDevice);
 }

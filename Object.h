@@ -9,7 +9,7 @@
 class Object
 {
 public:
-    Object(Mesh& mesh, Shader& shader, ComPtr<ID3D12Device> md3dDevice);
+    Object(Mesh& mesh, Shader& shader, XMFLOAT3 startPos, ComPtr<ID3D12Device> md3dDevice);
 
     Transform mTransform;
     Mesh& mMesh;

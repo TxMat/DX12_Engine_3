@@ -206,7 +206,6 @@ void BoxApp::Draw(const GameTimer& gt)
 
     ID3D12DescriptorHeap* descriptorHeaps[] = {mCbvHeap.Get()};
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
-    
 
     mObject->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
 
@@ -447,5 +446,5 @@ void BoxApp::BuildShaders()
 }
 void BoxApp::BuildObjects()
 {
-    mObject = new Object(mMesh, mShader, md3dDevice);
+    mObject = new Object(mMesh, mShader, XMFLOAT3(0.0f, 0.0f, 0.0f), md3dDevice);
 }
