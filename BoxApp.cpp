@@ -79,7 +79,7 @@ private:
     Transform mTransform;
     Mesh mMesh;
     Shader mShader;
-    Object mObject;
+    Object* mObject;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -125,9 +125,12 @@ bool BoxApp::Initialize()
     BuildDescriptorHeaps();
     BuildConstantBuffers();
     BuildRootSignature();
-    BuildShadersAndInputLayout();
-    BuildHolyPrismGeometry();
-    BuildPSO();
+    //BuildShadersAndInputLayout();
+    //BuildHolyPrismGeometry();
+    //BuildPSO();
+    BuildMeshes();
+    BuildShaders();
+    BuildObjects();
 
     mTransform = Transform();
 
@@ -182,6 +185,8 @@ void BoxApp::Update(const GameTimer& gt)
     ObjectConstants objConstants;
     XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(viewProj));
     mViewCB->CopyData(0, objConstants);
+
+    mObject->Update(gt);
 }
 
 void BoxApp::Draw(const GameTimer& gt)
@@ -214,6 +219,7 @@ void BoxApp::Draw(const GameTimer& gt)
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
     mCommandList->SetGraphicsRootConstantBufferView(1, mViewCB->Resource()->GetGPUVirtualAddress());
 
+    mObject->Draw(mCommandList);
     //mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
     //mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -482,12 +488,11 @@ void BoxApp::BuildMeshes()
 }
 void BoxApp::BuildShaders()
 {
-
     mShader = Shader(L"Shaders\\color.hlsl", L"Shaders\\color.hlsl");
     mShader.Init(md3dDevice, mBackBufferFormat, m4xMsaaState, m4xMsaaQuality, mDepthStencilFormat);
-    
 }
 void BoxApp::BuildObjects()
 {
-    mObject = Object(mMesh, mShader, md3dDevice);
+    Object obj = Object(mMesh, mShader, md3dDevice);
+    mObject = &obj;
 }
