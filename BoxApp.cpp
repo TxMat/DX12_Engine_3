@@ -153,7 +153,7 @@ void BoxApp::Update(const GameTimer& gt)
     float dt = gt.DeltaTime();
     float yaw = dt;
     float pitch = 0;
-    float roll = dt * .1; 
+    float roll = 0;
     mTransform.Rotate(yaw, pitch, roll);
     //mTransform.TranslateLocal(0, 0, 0);
     mTransform.ApplyChanges();
