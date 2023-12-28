@@ -1,5 +1,7 @@
 ﻿#include "Object.h"
 
+int Object::objectNumber = 0;
+
 void Object::Update(const GameTimer& gt)
 {
     mTransform.Rotate(gt.DeltaTime(), 0, 0);
