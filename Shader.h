@@ -18,9 +18,10 @@ public:
     void Draw(ID3D12GraphicsCommandList* cmdList, UINT indexCount);
     void BuildPSO();
 
+    Microsoft::WRL::ComPtr<ID3D12PipelineState> mPSO;
+    Microsoft::WRL::ComPtr<ID3D12RootSignature> mRootSignature;
+
 private:
     Microsoft::WRL::ComPtr<ID3DBlob> mVSByteCode;
     Microsoft::WRL::ComPtr<ID3DBlob> mPSByteCode;
-    Microsoft::WRL::ComPtr<ID3D12PipelineState> mPSO;
-    Microsoft::WRL::ComPtr<ID3D12RootSignature> mRootSignature;
 };

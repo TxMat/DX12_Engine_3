@@ -52,7 +52,7 @@ private:
     ComPtr<ID3D12RootSignature> mRootSignature = nullptr;
     ComPtr<ID3D12DescriptorHeap> mCbvHeap = nullptr;
 
-    std::unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
+    std::unique_ptr<UploadBuffer<ObjectConstants>> mViewCB = nullptr;
 
     std::unique_ptr<MeshGeometry> mBoxGeo = nullptr;
 
@@ -187,7 +187,7 @@ void BoxApp::Draw(const GameTimer& gt)
 
     // A command list can be reset after it has been added to the command queue via ExecuteCommandList.
     // Reusing the command list reuses memory.
-    ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), mPSO.Get()));
+    ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));// mPSO.Get()));
 
     mCommandList->RSSetViewports(1, &mScreenViewport);
     mCommandList->RSSetScissorRects(1, &mScissorRect);
@@ -207,12 +207,14 @@ void BoxApp::Draw(const GameTimer& gt)
 
     ID3D12DescriptorHeap* descriptorHeaps[] = {mCbvHeap.Get()};
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
+    mCommandList->SetGraphicsRootConstantBufferView(1, mViewCB->Resource()->GetGPUVirtualAddress());
 
-    mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
-    mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //mCommandList->SetGraphicsRootSignature(mRootSignature.Get());
+    //mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap->GetGPUDescriptorHandleForHeapStart());
-
+    //mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap->GetGPUDescriptorHandleForHeapStart());
+    //mCommandList->SetGraphicsRootConstantBufferView(0, );
+    
     // Replace by Mesh.Draw
     mMesh.Draw(mCommandList);
     
@@ -306,22 +308,22 @@ void BoxApp::BuildDescriptorHeaps()
 
 void BoxApp::BuildConstantBuffers()
 {
-    mObjectCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
+    mViewCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
 
-    UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
-
-    D3D12_GPU_VIRTUAL_ADDRESS cbAddress = mObjectCB->Resource()->GetGPUVirtualAddress();
-    // Offset to the ith object constant buffer in the buffer.
-    int boxCBufIndex = 0;
-    cbAddress += boxCBufIndex * objCBByteSize;
-
-    D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
-    cbvDesc.BufferLocation = cbAddress;
-    cbvDesc.SizeInBytes = objCBByteSize;
-
-    md3dDevice->CreateConstantBufferView(
-        &cbvDesc,
-        mCbvHeap->GetCPUDescriptorHandleForHeapStart());
+    //UINT objCBByteSize = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
+    //
+    //D3D12_GPU_VIRTUAL_ADDRESS cbAddress = mObjectCB->Resource()->GetGPUVirtualAddress();
+    //// Offset to the ith object constant buffer in the buffer.
+    //int boxCBufIndex = 0;
+    //cbAddress += boxCBufIndex * objCBByteSize;
+    //
+    //D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
+    //cbvDesc.BufferLocation = cbAddress;
+    //cbvDesc.SizeInBytes = objCBByteSize;
+    //
+    //md3dDevice->CreateConstantBufferView(
+    //    &cbvDesc,
+    //    mCbvHeap->GetCPUDescriptorHandleForHeapStart());
 }
 void BoxApp::BuildObjectConstantBuffer(Object& obj)
 {
@@ -351,12 +353,14 @@ void BoxApp::BuildRootSignature()
     // thought of as defining the function signature.  
 
     // Root parameter can be a table, root descriptor or root constants.
-    CD3DX12_ROOT_PARAMETER slotRootParameter[1];
+    CD3DX12_ROOT_PARAMETER slotRootParameter[2];
 
     // Create a single descriptor table of CBVs.
-    CD3DX12_DESCRIPTOR_RANGE cbvTable;
-    cbvTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
-    slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable);
+    //CD3DX12_DESCRIPTOR_RANGE cbvTable;
+    //cbvTable.Init(D3D12_DESCRIPTOR_RANGE_TYPE_CBV, 1, 0);
+    //slotRootParameter[0].InitAsDescriptorTable(1, &cbvTable);
+    slotRootParameter[0].InitAsConstantBufferView(0);
+    slotRootParameter[1].InitAsConstantBufferView(1);
 
     // A root signature is an array of root parameters.
     CD3DX12_ROOT_SIGNATURE_DESC rootSigDesc(1, slotRootParameter, 0, nullptr,

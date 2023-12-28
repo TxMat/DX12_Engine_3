@@ -19,7 +19,7 @@ public:
 private:
 	vector<Vertex> vertices = vector<Vertex>();
 	vector<uint16_t> indices = vector<uint16_t>();
-
+public:
 	unique_ptr<MeshGeometry> mGeometry = nullptr;
 };
 

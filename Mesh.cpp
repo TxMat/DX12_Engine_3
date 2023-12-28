@@ -43,10 +43,4 @@ void Mesh::Create(vector<Vertex>& _vertices, vector<uint16_t>& _indices, ComPtr<
     mGeometry->DrawArgs["Geometry"] = submesh;
 }
 
-void Mesh::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList)
-{
-    mCommandList->IASetVertexBuffers(0, 1, &mGeometry->VertexBufferView());
-    mCommandList->IASetIndexBuffer(&mGeometry->IndexBufferView());
 
-    mCommandList->DrawIndexedInstanced(mGeometry->DrawArgs["Geometry"].IndexCount, 1, 0, 0, 0);
-}
