@@ -76,7 +76,7 @@ private:
     POINT mLastMousePos;
 
     Transform mTransform;
-    Mesh *mMesh = nullptr;
+    Mesh mMesh;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -216,7 +216,7 @@ void BoxApp::Draw(const GameTimer& gt)
     mCommandList->SetGraphicsRootDescriptorTable(0, mCbvHeap->GetGPUDescriptorHandleForHeapStart());
 
     // Replace by Mesh.Draw
-    //mMesh->Draw(mCommandList);
+    mMesh.Draw(mCommandList);
     //mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
     //mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
     //
@@ -402,7 +402,7 @@ void BoxApp::BuildHolyPrismGeometry()
         4, 0, 3,
     };
 
-    mMesh = &Mesh(vertices, indices, md3dDevice, mCommandList);
+    mMesh.Create(vertices, indices, md3dDevice, mCommandList);
 
     //const SIZE_T vbByteSize = vertices.size() * sizeof(Vertex);
     //constexpr UINT ibByteSize = static_cast<UINT>(indices.size()) * sizeof(std::uint16_t);

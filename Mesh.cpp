@@ -1,6 +1,11 @@
 #include "Mesh.h"
 
-Mesh::Mesh(vector<Vertex>& _vertices, vector<uint16_t>& _indices, ComPtr<ID3D12Device> md3dDevice, ComPtr<ID3D12GraphicsCommandList> mCommandList)
+Mesh::Mesh()
+{
+    
+}
+
+void Mesh::Create(vector<Vertex>& _vertices, vector<uint16_t>& _indices, ComPtr<ID3D12Device> md3dDevice, ComPtr<ID3D12GraphicsCommandList> mCommandList)
 {
 	vertices.assign(_vertices.begin(), _vertices.end());
 	indices.assign(_indices.begin(), _indices.end());
@@ -42,7 +47,6 @@ void Mesh::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList)
 {
     mCommandList->IASetVertexBuffers(0, 1, &mGeometry->VertexBufferView());
     mCommandList->IASetIndexBuffer(&mGeometry->IndexBufferView());
-
 
     mCommandList->DrawIndexedInstanced(mGeometry->DrawArgs["Geometry"].IndexCount, 1, 0, 0, 0);
 }
