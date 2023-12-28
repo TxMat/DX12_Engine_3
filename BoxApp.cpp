@@ -219,6 +219,10 @@ void BoxApp::Draw(const GameTimer& gt)
 
     // Replace by Mesh.Draw
     mMesh.Draw(mCommandList);
+    
+    // Replace by mShader->Draw
+    //mShader->Draw(mCommandList.Get(), mBoxGeo->DrawArgs["box"].IndexCount);
+    
     //mCommandList->IASetVertexBuffers(0, 1, &mBoxGeo->VertexBufferView());
     //mCommandList->IASetIndexBuffer(&mBoxGeo->IndexBufferView());
     //
