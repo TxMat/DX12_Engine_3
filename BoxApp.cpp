@@ -12,16 +12,11 @@
 #include "Common/MathHelper.h"
 #include "Common/UploadBuffer.h"
 #include "Tranform.h"
+#include "Vertex.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
 using namespace DirectX::PackedVector;
-
-struct Vertex
-{
-    XMFLOAT3 Pos;
-    XMFLOAT4 Color;
-};
 
 struct ObjectConstants
 {
@@ -153,7 +148,9 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    mTransform.Rotate(gt.DeltaTime(), 0, 0);
+    
+    mTransform.Rotate(gt.DeltaTime(), 0, gt.DeltaTime()/3);
+    //mTransform.TranslateLocal(0, 0, 0);
     mTransform.ApplyChanges();
 
     // Convert Spherical to Cartesian coordinates.
