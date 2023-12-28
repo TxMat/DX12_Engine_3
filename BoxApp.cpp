@@ -493,6 +493,5 @@ void BoxApp::BuildShaders()
 }
 void BoxApp::BuildObjects()
 {
-    Object obj = Object(mMesh, mShader, md3dDevice);
-    mObject = &obj;
+    mObject = new Object(mMesh, mShader, md3dDevice);
 }
