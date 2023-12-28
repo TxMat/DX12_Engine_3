@@ -315,7 +315,7 @@ void BoxApp::BuildConstantBuffers()
 
     D3D12_CONSTANT_BUFFER_VIEW_DESC cbvDesc;
     cbvDesc.BufferLocation = cbAddress;
-    cbvDesc.SizeInBytes = d3dUtil::CalcConstantBufferByteSize(sizeof(ObjectConstants));
+    cbvDesc.SizeInBytes = objCBByteSize;
 
     md3dDevice->CreateConstantBufferView(
         &cbvDesc,
