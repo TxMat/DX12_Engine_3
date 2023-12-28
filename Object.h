@@ -13,4 +13,8 @@ public:
 
     Transform mTransform;
     Mesh& mMesh;
+
+    void Update(const GameTimer& gt);
+    
+    void Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList);
 };
