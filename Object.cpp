@@ -1,7 +1,5 @@
 ﻿#include "Object.h"
 
-int Object::objectNumber = 0;
-
 void Object::Update(const GameTimer& gt)
 {
     mTransform.Rotate(gt.DeltaTime(), 0, 0);
@@ -16,9 +14,6 @@ void Object::Update(const GameTimer& gt)
 Object::Object(Mesh& mesh, Shader& shader, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
 {
     mTransform = Transform();
-
-    mObjectIndex = objectNumber;
-    objectNumber++;
 
     BuildConstantBuffer(md3dDevice);
 }

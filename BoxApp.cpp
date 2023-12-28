@@ -44,7 +44,6 @@ private:
     void BuildConstantBuffers();
     void BuildRootSignature();
     void BuildShadersAndInputLayout();
-    void BuildHolyPrismGeometry();
     void BuildPSO();
 
     void BuildMeshes();
@@ -389,43 +388,6 @@ void BoxApp::BuildShadersAndInputLayout()
         {"POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0},
         {"COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D12_INPUT_CLASSIFICATION_PER_VERTEX_DATA, 0}
     };
-}
-
-void BoxApp::BuildHolyPrismGeometry()
-{
-    
-
-    //const SIZE_T vbByteSize = vertices.size() * sizeof(Vertex);
-    //constexpr UINT ibByteSize = static_cast<UINT>(indices.size()) * sizeof(std::uint16_t);
-    //
-    //mBoxGeo = std::make_unique<MeshGeometry>();
-    //mBoxGeo->Name = "boxGeo";
-    //
-    //ThrowIfFailed(D3DCreateBlob(vbByteSize, &mBoxGeo->VertexBufferCPU));
-    //CopyMemory(mBoxGeo->VertexBufferCPU->GetBufferPointer(), vertices.data(), vbByteSize);
-    //
-    //ThrowIfFailed(D3DCreateBlob(ibByteSize, &mBoxGeo->IndexBufferCPU));
-    //CopyMemory(mBoxGeo->IndexBufferCPU->GetBufferPointer(), indices.data(), ibByteSize);
-    //
-    //mBoxGeo->VertexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
-    //                                                        mCommandList.Get(), vertices.data(), vbByteSize,
-    //                                                        mBoxGeo->VertexBufferUploader);
-    //
-    //mBoxGeo->IndexBufferGPU = d3dUtil::CreateDefaultBuffer(md3dDevice.Get(),
-    //                                                       mCommandList.Get(), indices.data(), ibByteSize,
-    //                                                       mBoxGeo->IndexBufferUploader);
-    //
-    //mBoxGeo->VertexByteStride = sizeof(Vertex);
-    //mBoxGeo->VertexBufferByteSize = vbByteSize;
-    //mBoxGeo->IndexFormat = DXGI_FORMAT_R16_UINT;
-    //mBoxGeo->IndexBufferByteSize = ibByteSize;
-    //
-    //SubmeshGeometry submesh;
-    //submesh.IndexCount = static_cast<UINT>(indices.size());
-    //submesh.StartIndexLocation = 0;
-    //submesh.BaseVertexLocation = 0;
-    //
-    //mBoxGeo->DrawArgs["box"] = submesh;
 }
 
 void BoxApp::BuildPSO()
