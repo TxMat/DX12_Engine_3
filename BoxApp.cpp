@@ -113,13 +113,18 @@ struct Transform
         anyChange = true;
     }
 
+    XMVECTOR TransformVector(XMVECTOR vector)
+    {
+        return XMVector3Transform(vector, XMLoadFloat4x4(&matrix));
+    }
+
     void ApplyChanges()
     {
         if (anyChange)
         {
             XMStoreFloat4x4(&matrix,
-                            XMMatrixMultiply(XMMatrixMultiply(XMLoadFloat4x4(&mPos), XMLoadFloat4x4(&mSca)),
-                                             XMLoadFloat4x4(&mRot)));
+                            XMMatrixMultiply(XMMatrixMultiply(XMLoadFloat4x4(&mSca), XMLoadFloat4x4(&mRot)),
+                                             XMLoadFloat4x4(&mPos)));
         }
         anyChange = false;
     }
@@ -177,8 +182,6 @@ private:
     POINT mLastMousePos;
 
     Transform mTransform;
-
-    float i;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -229,7 +232,6 @@ bool BoxApp::Initialize()
     BuildPSO();
 
     mTransform = Transform();
-    i = 0;
 
     // Execute the initialization commands.
     ThrowIfFailed(mCommandList->Close());
@@ -254,10 +256,7 @@ void BoxApp::OnResize()
 void BoxApp::Update(const GameTimer& gt)
 {
     mTransform.Rotate(0, gt.DeltaTime(), 0);
-    //mTransform.TranslateLocal(0, 0, 0.01f);
-    //mTransform.Rotate(0, 0, 0);
     mTransform.ApplyChanges();
-    i += 0.001f;
 
     // Convert Spherical to Cartesian coordinates.
     float x = mRadius * sinf(mPhi) * cosf(mTheta);
@@ -266,7 +265,7 @@ void BoxApp::Update(const GameTimer& gt)
 
     // Build the view matrix.
     XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMVectorSet(mTransform.vUp.y, 0, 0, 0);//XMVectorZero();
+    XMVECTOR target = XMVectorSet(mTransform.vUp.y, 0, 0, 0);
     XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
     XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
