@@ -95,7 +95,7 @@ struct Transform
         if (anyChange)
         {
             XMStoreFloat4x4(&matrix, XMLoadFloat4x4(&mSca) * XMLoadFloat4x4(&mRot) * XMLoadFloat4x4(&mPos));
+            anyChange = false;
         }
-        anyChange = false;
     }
 };
