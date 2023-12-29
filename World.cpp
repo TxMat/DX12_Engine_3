@@ -114,6 +114,14 @@ BoxApp::~BoxApp()
     {
         delete object;
     }
+    for (auto& mesh : mMeshes)
+    {
+        delete mesh.second;
+    }
+    for (auto& shader : mShaders)
+    {
+        delete shader;
+    }
 }
 
 bool BoxApp::Initialize()
