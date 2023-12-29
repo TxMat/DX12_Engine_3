@@ -49,7 +49,8 @@ private:
 
     void BuildDescriptorHeaps();
     void BuildConstantBuffers();
-    void BuildSphereMeshes();
+    void BuildSphereMesh();
+    void BuildPrismMesh();
 
     void BuildMeshes();
     void BuildShaders();
@@ -136,7 +137,6 @@ bool BoxApp::Initialize()
     BuildConstantBuffers();
 
     BuildMeshes();
-    BuildSphereMeshes();
     BuildShaders();
     BuildObjects();
 
@@ -314,7 +314,7 @@ void BoxApp::BuildConstantBuffers()
     mViewCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
 }
 
-void BoxApp::BuildSphereMeshes()
+void BoxApp::BuildSphereMesh()
 {
     // build a sphere
     float radius = 1.0f;
@@ -373,7 +373,7 @@ void BoxApp::BuildSphereMeshes()
     
 }
 
-void BoxApp::BuildMeshes()
+void BoxApp::BuildPrismMesh()
 {
     vector<Vertex> vertices =
     {
@@ -402,6 +402,12 @@ void BoxApp::BuildMeshes()
 
     mMeshes["holy_prism"] = new Mesh();
     mMeshes["holy_prism"]->Create(vertices, indices, md3dDevice, mCommandList);
+}
+
+void BoxApp::BuildMeshes()
+{   
+    BuildPrismMesh();
+    BuildSphereMesh();
 }
 void BoxApp::BuildShaders()
 {
