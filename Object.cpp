@@ -12,7 +12,7 @@ void Object::Update(const GameTimer& gt)
     mObjectCB->CopyData(0, objConstants);
 }
 
-Object::Object(Mesh& mesh, Shader& shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
+Object::Object(Mesh* mesh, Shader& shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
 {
     mTransform = Transform();
     mTransform.TranslateWorld(startPos.x, startPos.y, startPos.z);
@@ -29,8 +29,8 @@ void Object::BuildConstantBuffer(ComPtr<ID3D12Device> md3dDevice)
 
 void Object::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRTUAL_ADDRESS add)
 {
-    mCommandList->IASetVertexBuffers(0, 1, &mMesh.mGeometry->VertexBufferView());
-    mCommandList->IASetIndexBuffer(&mMesh.mGeometry->IndexBufferView());
+    mCommandList->IASetVertexBuffers(0, 1, &mMesh->mGeometry->VertexBufferView());
+    mCommandList->IASetIndexBuffer(&mMesh->mGeometry->IndexBufferView());
 
     mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
@@ -41,5 +41,5 @@ void Object::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRT
     mCommandList->SetPipelineState(mShader.mPSO.Get());
 
     // End
-    mCommandList->DrawIndexedInstanced(mMesh.mGeometry->DrawArgs["Geometry"].IndexCount, 1, 0, 0, 0);
+    mCommandList->DrawIndexedInstanced(mMesh->mGeometry->DrawArgs["Geometry"].IndexCount, 1, 0, 0, 0);
 }

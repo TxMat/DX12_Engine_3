@@ -8,6 +8,8 @@
 //   Hold the right mouse button down and move the mouse to zoom in and out.
 //***************************************************************************************
 
+#include <map>
+
 #include "Common/d3dApp.h"
 #include "Common/MathHelper.h"
 #include "Common/UploadBuffer.h"
@@ -47,6 +49,7 @@ private:
 
     void BuildDescriptorHeaps();
     void BuildConstantBuffers();
+    void BuildSphereMeshes();
 
     void BuildMeshes();
     void BuildShaders();
@@ -68,10 +71,11 @@ private:
     POINT mLastMousePos;
     Transform mCameraTransform;
 
-    Mesh mMesh;
+    //Mesh mMesh;
     Shader mShader;
 
     vector<Object*> mObjects;
+    map<string, Mesh*> mMeshes;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -124,7 +128,8 @@ bool BoxApp::Initialize()
     BuildDescriptorHeaps();
     BuildConstantBuffers();
 
-    BuildMeshes();
+    //BuildMeshes();
+    BuildSphereMeshes();
     BuildShaders();
     BuildObjects();
 
@@ -302,6 +307,61 @@ void BoxApp::BuildConstantBuffers()
     mViewCB = std::make_unique<UploadBuffer<ObjectConstants>>(md3dDevice.Get(), 1, true);
 }
 
+void BoxApp::BuildSphereMeshes()
+{
+    // build a sphere
+    float radius = 1.0f;
+    int sliceCount = 20;
+    int stackCount = 20;
+
+    vector<Vertex> vertices;
+    vector<std::uint16_t> indices;
+
+    for (int i = 0; i <= stackCount; i++)
+    {
+        float phi = XM_PIDIV2 - i * XM_PI / stackCount;
+        float y = radius * sinf(phi);
+        float r = radius * cosf(phi);
+
+        for (int j = 0; j <= sliceCount; j++)
+        {
+            float theta = j * 2.0f * XM_PI / sliceCount;
+            float x = r * sinf(theta);
+            float z = r * cosf(theta);
+
+            float red = (float)i / stackCount;
+            float green = (float)j / sliceCount;
+            float blue = 1.0f - red;
+
+            Vertex v;
+            v.Pos = XMFLOAT3(x, y, z);
+            v.Color = XMFLOAT4(red, green, blue, 1.0f);
+
+            vertices.push_back(v);
+        }
+    }
+
+    // indices
+    for (int i = 0; i < stackCount; ++i)
+    {
+        for (int j = 0; j < sliceCount; ++j)
+        {
+            indices.push_back(i * (sliceCount + 1) + j);
+            indices.push_back((i + 1) * (sliceCount + 1) + j);
+            indices.push_back((i + 1) * (sliceCount + 1) + j + 1);
+
+            indices.push_back(i * (sliceCount + 1) + j);
+            indices.push_back((i + 1) * (sliceCount + 1) + j + 1);
+            indices.push_back(i * (sliceCount + 1) + j + 1);
+        }
+    }
+
+    mMeshes["sphere"] = new Mesh();
+    mMeshes["sphere"]->Create(vertices, indices, md3dDevice, mCommandList);
+    
+    
+}
+
 void BoxApp::BuildMeshes()
 {
     vector<Vertex> vertices =
@@ -329,7 +389,8 @@ void BoxApp::BuildMeshes()
         4, 0, 3,
     };
 
-    mMesh.Create(vertices, indices, md3dDevice, mCommandList);
+    mMeshes["holy_prism"] = new Mesh();
+    mMeshes["holy_prism"]->Create(vertices, indices, md3dDevice, mCommandList);
 }
 void BoxApp::BuildShaders()
 {
@@ -347,7 +408,7 @@ void BoxApp::BuildObjects()
     float z = -20;
     for (int i = 1; i <= 1000; i++)
     {
-        mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(x, i % 2 == 0 ? 1.0f : 0.0f, z), XMFLOAT3(0, i % 2 == 0 ? 3.1416f : 0, 0), md3dDevice));
+        mObjects.push_back(new Object(mMeshes["sphere"], mShader, XMFLOAT3(x, i % 2 == 0 ? 1.0f : 0.0f, z), XMFLOAT3(0, i % 2 == 0 ? 3.1416f : 0, 0), md3dDevice));
         if (i % 40 == 0)
         {
             x = -20;
