@@ -9,7 +9,8 @@
 class Object
 {
 public:
-    Object(Mesh* mesh, Shader* shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice);
+    virtual ~Object() = default;
+    Object(Mesh* mesh, Shader* shader, XMFLOAT3 startPos, ComPtr<ID3D12Device> md3dDevice);
 
     Transform mTransform;
     Mesh* mMesh;
@@ -18,6 +19,6 @@ public:
     unique_ptr<UploadBuffer<ObjectConstants>> mObjectCB = nullptr;
 
     void BuildConstantBuffer(ComPtr<ID3D12Device> md3dDevice);
-    void Update(const GameTimer& gt);
-    void Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRTUAL_ADDRESS add);
+    virtual void Update(const GameTimer& gt);
+    virtual void Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRTUAL_ADDRESS add);
 };

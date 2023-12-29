@@ -2,21 +2,17 @@
 
 void Object::Update(const GameTimer& gt)
 {
-    mTransform.Rotate(gt.DeltaTime(), 0, 0);
-    mTransform.TranslateLocal(0, 0, gt.DeltaTime());
-    mTransform.ApplyChanges();
-
     ObjectConstants objConstants;
     XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(XMLoadFloat4x4(&mTransform.matrix)));
 
     mObjectCB->CopyData(0, objConstants);
 }
 
-Object::Object(Mesh* mesh, Shader* shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
+Object::Object(Mesh* mesh, Shader* shader, XMFLOAT3 startPos, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh),
+    mShader(shader)
 {
     mTransform = Transform();
     mTransform.TranslateWorld(startPos.x, startPos.y, startPos.z);
-    mTransform.Rotate(startRot.x, startRot.y, startRot.z);
     mTransform.ApplyChanges();
 
     BuildConstantBuffer(md3dDevice);

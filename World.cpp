@@ -18,6 +18,7 @@
 #include "Mesh.h"
 #include "Object.h"
 #include "ObjectConstants.h"
+#include "RotatingObject.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
@@ -421,12 +422,12 @@ void BoxApp::BuildObjects()
     {
         if (i % 2 == 0)
         {
-            mObjects.push_back(new Object(mMeshes["sphere"], mShaders[0], XMFLOAT3(x, 1.0f, z), XMFLOAT3(0, 0, 0), md3dDevice));
+            mObjects.push_back(new RotatingObject(mMeshes["sphere"], mShaders[0], XMFLOAT3(x, 1.0f, z), XMFLOAT3(0, 0, 0), md3dDevice));
         }
         else
         {
-            mObjects.push_back(new Object(mMeshes["holy_prism"], mShaders[0], XMFLOAT3(x, 0.0f, z), XMFLOAT3(0, 0, 0), md3dDevice));
-            mObjects.push_back(new Object(mMeshes["holy_prism"], mShaders[0], XMFLOAT3(x, 2.0f, z), XMFLOAT3(0, 3.1416f, 0), md3dDevice));
+            mObjects.push_back(new RotatingObject(mMeshes["holy_prism"], mShaders[0], XMFLOAT3(x, 0.0f, z), XMFLOAT3(0, 0, 0), md3dDevice));
+            mObjects.push_back(new RotatingObject(mMeshes["holy_prism"], mShaders[0], XMFLOAT3(x, 2.0f, z), XMFLOAT3(0, 3.1416f, 0), md3dDevice));
         }
 
         
