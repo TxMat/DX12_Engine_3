@@ -59,6 +59,19 @@ protected:
     {
     }
 
+    virtual void OnKeyLeft()
+    {
+    }
+    virtual void OnKeyRight()
+    {
+    }
+    virtual void OnKeyUp()
+    {
+    }
+    virtual void OnKeyDown()
+    {
+    }
+
 protected:
     bool InitMainWindow();
     bool InitDirect3D();

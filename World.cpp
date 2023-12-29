@@ -35,10 +35,15 @@ private:
     void OnResize() override;
     void Update(const GameTimer& gt) override;
     void Draw(const GameTimer& gt) override;
+    void UpdateCamera(const GameTimer& gt);
 
     void OnMouseDown(WPARAM btnState, int x, int y) override;
     void OnMouseUp(WPARAM btnState, int x, int y) override;
     void OnMouseMove(WPARAM btnState, int x, int y) override;
+    void OnKeyLeft() override;
+    void OnKeyRight() override;
+    void OnKeyUp() override;
+    void OnKeyDown() override;
 
     void BuildDescriptorHeaps();
     void BuildConstantBuffers();
@@ -61,6 +66,7 @@ private:
     float mRadius = 5.0f;
 
     POINT mLastMousePos;
+    Transform mCameraTransform;
 
     Mesh mMesh;
     Shader mShader;
@@ -144,20 +150,25 @@ void BoxApp::OnResize()
 
 void BoxApp::Update(const GameTimer& gt)
 {
-    // Convert Spherical to Cartesian coordinates.
-    float x = mRadius * sinf(mPhi) * cosf(mTheta);
-    float z = mRadius * sinf(mPhi) * sinf(mTheta);
-    float y = mRadius * cosf(mPhi);
+    UpdateCamera(gt);
+
+    for (auto& object : mObjects)
+    {
+        object->Update(gt);
+    }
+}
+void BoxApp::UpdateCamera(const GameTimer& gt)
+{
+    mCameraTransform.ApplyChanges();
 
     // Build the view matrix.
-    XMVECTOR pos = XMVectorSet(x, y, z, 1.0f);
-    XMVECTOR target = XMVectorZero();
+    XMVECTOR pos = XMLoadFloat3(&mCameraTransform.vPos);
+    XMVECTOR target = XMLoadFloat3(&mCameraTransform.vPos) + XMLoadFloat3(&mCameraTransform.vDir);
     XMVECTOR up = XMVectorSet(0.0f, 1.0f, 0.0f, 0.0f);
 
     XMMATRIX view = XMMatrixLookAtLH(pos, target, up);
     XMStoreFloat4x4(&mView, view);
 
-    //XMMATRIX world = XMLoadFloat4x4(&mWorld);
     XMMATRIX proj = XMLoadFloat4x4(&mProj);
     XMMATRIX viewProj = view * proj;
 
@@ -165,11 +176,6 @@ void BoxApp::Update(const GameTimer& gt)
     ObjectConstants objConstants;
     XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(viewProj));
     mViewCB->CopyData(0, objConstants);
-
-    for (auto& object : mObjects)
-    {
-        object->Update(gt);
-    }
 }
 
 void BoxApp::Draw(const GameTimer& gt)
@@ -180,7 +186,7 @@ void BoxApp::Draw(const GameTimer& gt)
 
     // A command list can be reset after it has been added to the command queue via ExecuteCommandList.
     // Reusing the command list reuses memory.
-    ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));// mPSO.Get()));
+    ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
 
     mCommandList->RSSetViewports(1, &mScreenViewport);
     mCommandList->RSSetScissorRects(1, &mScissorRect);
@@ -256,28 +262,28 @@ void BoxApp::OnMouseMove(WPARAM btnState, int x, int y)
         float dx = XMConvertToRadians(0.25f * static_cast<float>(x - mLastMousePos.x));
         float dy = XMConvertToRadians(0.25f * static_cast<float>(y - mLastMousePos.y));
 
-        // Update angles based on input to orbit camera around box.
-        mTheta += dx;
-        mPhi += dy;
-
-        // Restrict the angle mPhi.
-        mPhi = MathHelper::Clamp(mPhi, 0.1f, MathHelper::Pi - 0.1f);
-    }
-    else if ((btnState & MK_RBUTTON) != 0)
-    {
-        // Make each pixel correspond to 0.005 unit in the scene.
-        float dx = 0.005f * static_cast<float>(x - mLastMousePos.x);
-        float dy = 0.005f * static_cast<float>(y - mLastMousePos.y);
-
-        // Update the camera radius based on input.
-        mRadius += dx - dy;
-
-        // Restrict the radius.
-        mRadius = MathHelper::Clamp(mRadius, 3.0f, 15.0f);
+        mCameraTransform.Rotate(dx, dy, 0);
     }
 
     mLastMousePos.x = x;
     mLastMousePos.y = y;
+}
+
+void BoxApp::OnKeyLeft()
+{
+    mCameraTransform.TranslateLocal(-0.1f, 0, 0);
+}
+void BoxApp::OnKeyRight()
+{
+    mCameraTransform.TranslateLocal(0.1f, 0, 0);
+}
+void BoxApp::OnKeyUp()
+{
+    mCameraTransform.TranslateLocal(0, 0, 0.1f);
+}
+void BoxApp::OnKeyDown()
+{
+    mCameraTransform.TranslateLocal(0, 0, -0.1f);
 }
 
 void BoxApp::BuildDescriptorHeaps()

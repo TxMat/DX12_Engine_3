@@ -366,7 +366,24 @@ LRESULT D3DApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         }
         else if (static_cast<int>(wParam) == VK_F2)
             Set4xMsaaState(!m4xMsaaState);
-
+        return 0;
+    case WM_KEYDOWN:
+        if (wParam == VK_LEFT)
+        {
+            OnKeyLeft();
+        }
+        if (wParam == VK_RIGHT)
+        {
+            OnKeyRight();
+        }
+        if (wParam == VK_UP)
+        {
+            OnKeyUp();
+        }
+        if (wParam == VK_DOWN)
+        {
+            OnKeyDown();
+        }
         return 0;
     case WM_KEYDOWN:
         if (wParam == VK_SPACE)
