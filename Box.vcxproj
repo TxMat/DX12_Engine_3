@@ -147,6 +147,7 @@
         <ClCompile Include="BoxApp.cpp"/>
         <ClCompile Include="Object.cpp" />
         <ClCompile Include="Mesh.cpp" />
+        <ClCompile Include="Renderer.cpp" />
         <ClCompile Include="Shader.cpp" />
     </ItemGroup>
     <ItemGroup>
@@ -156,6 +157,7 @@
         <ClInclude Include="Common\MathHelper.h"/>
         <ClInclude Include="Common\UploadBuffer.h"/>
         <ClInclude Include="Object.h" />
+        <ClInclude Include="Renderer.h" />
         <ClInclude Include="Shader.h" />
         <ClInclude Include="Tranform.h" />
         <ClInclude Include="Vertex.h" />
