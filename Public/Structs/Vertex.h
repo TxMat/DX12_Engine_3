@@ -3,6 +3,6 @@
 
 struct Vertex
 {
-    DirectX::XMFLOAT3 Pos;
-    DirectX::XMFLOAT4 Color;
+    XMFLOAT3 Pos;
+    XMFLOAT4 Color;
 };

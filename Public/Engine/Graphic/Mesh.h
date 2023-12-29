@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Vertex.h"
+#include "Public/Structs/Vertex.h"
 #include "Common/d3dApp.h"
 
 using Microsoft::WRL::ComPtr;

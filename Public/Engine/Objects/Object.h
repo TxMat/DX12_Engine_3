@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "Mesh.h"
-#include "Shader.h"
-#include "Tranform.h"
+#include "Public/Engine/Graphic/Mesh.h"
+#include "Public/Engine/Graphic/Shader.h"
+#include "Public/Structs/Tranform.h"
 #include "Common/d3dApp.h"
 #include "Common/UploadBuffer.h"
 #include "ObjectConstants.h"

@@ -6,7 +6,6 @@
 #include <wrl/client.h>
 
 #include "Common/d3dUtil.h"
-#include "Common/d3dApp.h"
 
 using Microsoft::WRL::ComPtr;
 

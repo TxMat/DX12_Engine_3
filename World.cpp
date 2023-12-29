@@ -13,12 +13,13 @@
 #include "Common/d3dApp.h"
 #include "Common/MathHelper.h"
 #include "Common/UploadBuffer.h"
-#include "Tranform.h"
-#include "Vertex.h"
-#include "Mesh.h"
-#include "Object.h"
+#include "Public/Structs/Tranform.h"
+#include "Public/Structs/Vertex.h"
+#include "Public/Engine/Graphic/Mesh.h"
+#include "Public/Engine/Objects/Object.h"
 #include "ObjectConstants.h"
-#include "RotatingObject.h"
+#include "Public/Engine/Graphic/Shader.h"
+#include "Public/Engine/Objects/RotatingObject.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;
