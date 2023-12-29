@@ -332,10 +332,10 @@ void BoxApp::BuildShaders()
 }
 void BoxApp::BuildObjects()
 {
-    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-2.5f, -1.0f, 4.0f), md3dDevice));
-    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, -1.0f, 4.0f), md3dDevice));
-    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, -1.0f, 1.0f), md3dDevice));
-    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-2.5f, -1.0f, 1.0f), md3dDevice));
+    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-2.5f, +2.0f, 4.0f), md3dDevice));
+    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, +2.0f, 4.0f), md3dDevice));
+    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, +2.0f, 1.0f), md3dDevice));
+    // mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-2.5f, +2.0f, 1.0f), md3dDevice));
     
     float x = -20;
     float z = -20;
