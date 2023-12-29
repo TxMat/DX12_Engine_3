@@ -5,7 +5,7 @@
 #include <string>
 #include <wrl/client.h>
 
-#include "Common/d3dUtil.h"
+#include "d3dUtil.h"
 
 using Microsoft::WRL::ComPtr;
 

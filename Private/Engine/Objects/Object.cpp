@@ -1,4 +1,7 @@
-﻿#include "Object.h"
+﻿
+#include "Engine/Objects/Object.h"
+
+#include "Structs/ObjectConstants.h"
 
 void Object::Update(const GameTimer& gt)
 {

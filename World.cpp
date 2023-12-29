@@ -13,11 +13,10 @@
 #include "Common/d3dApp.h"
 #include "Common/MathHelper.h"
 #include "Common/UploadBuffer.h"
-#include "Public/Structs/Tranform.h"
+#include "Structs/Tranform.h"
 #include "Public/Structs/Vertex.h"
 #include "Public/Engine/Graphic/Mesh.h"
 #include "Public/Engine/Objects/Object.h"
-#include "ObjectConstants.h"
 #include "Public/Engine/Graphic/Shader.h"
 #include "Public/Engine/Objects/RotatingObject.h"
 

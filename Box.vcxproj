@@ -99,6 +99,7 @@
             <WarningLevel>Level3</WarningLevel>
             <Optimization>Disabled</Optimization>
             <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+            <AdditionalIncludeDirectories>Public;Common</AdditionalIncludeDirectories>
         </ClCompile>
         <Link>
             <SubSystem>Windows</SubSystem>
@@ -452,6 +453,9 @@
         <ClInclude Include="Public\Engine\Graphic\Shader.h" />
         <ClInclude Include="Public\Engine\Objects\Object.h" />
         <ClInclude Include="Public\Engine\Objects\RotatingObject.h" />
+        <ClInclude Include="Public\Structs\Tranform.h"/>
+        <ClInclude Include="Public\Structs\Vertex.h"/>
+        <ClInclude Include="Public\Structs\ObjectConstants.h"/>
     </ItemGroup>
     <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets"/>
     <ImportGroup Label="ExtensionTargets">

@@ -1,4 +1,4 @@
-﻿#include "Public/Engine/Objects/RotatingObject.h"
+﻿#include "Engine/Objects/RotatingObject.h"
 
 RotatingObject::RotatingObject(Mesh* mesh, Shader* shader, const XMFLOAT3& startPos, const XMFLOAT3& startRot,
     const ComPtr<ID3D12Device>& md3dDevice): Object(mesh, shader, startPos, md3dDevice)

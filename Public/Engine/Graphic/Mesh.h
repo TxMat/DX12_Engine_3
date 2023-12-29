@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Public/Structs/Vertex.h"
-#include "Common/d3dApp.h"
+#include "Structs/Vertex.h"
+#include "d3dApp.h"
 
 using Microsoft::WRL::ComPtr;
 using namespace DirectX;

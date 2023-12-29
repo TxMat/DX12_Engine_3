@@ -1,10 +1,10 @@
 ﻿#pragma once
-#include "Public/Engine/Graphic/Mesh.h"
-#include "Public/Engine/Graphic/Shader.h"
-#include "Public/Structs/Tranform.h"
-#include "Common/d3dApp.h"
-#include "Common/UploadBuffer.h"
-#include "ObjectConstants.h"
+#include "Engine/Graphic/Mesh.h"
+#include "Engine/Graphic/Shader.h"
+#include "Structs/Tranform.h"
+#include "d3dApp.h"
+#include "UploadBuffer.h"
+#include "Structs/ObjectConstants.h"
 
 class Object
 {
