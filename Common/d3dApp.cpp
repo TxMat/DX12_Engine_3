@@ -384,13 +384,11 @@ LRESULT D3DApp::MsgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
         {
             OnKeyDown();
         }
-        return 0;
-    case WM_KEYDOWN:
         if (wParam == VK_SPACE)
         {
             mAppPaused = !mAppPaused;
-            return 0;
         }
+        return 0;        
     }
 
     return DefWindowProc(hwnd, msg, wParam, lParam);

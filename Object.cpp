@@ -12,10 +12,11 @@ void Object::Update(const GameTimer& gt)
     mObjectCB->CopyData(0, objConstants);
 }
 
-Object::Object(Mesh& mesh, Shader& shader, XMFLOAT3 startPos, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
+Object::Object(Mesh& mesh, Shader& shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
 {
     mTransform = Transform();
     mTransform.TranslateWorld(startPos.x, startPos.y, startPos.z);
+    mTransform.Rotate(startRot.x, startRot.y, startRot.z);
     mTransform.ApplyChanges();
 
     BuildConstantBuffer(md3dDevice);

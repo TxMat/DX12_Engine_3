@@ -347,7 +347,7 @@ void BoxApp::BuildObjects()
     float z = -20;
     for (int i = 1; i <= 1000; i++)
     {
-        mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(x, 0.0f, z), md3dDevice));
+        mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(x, i % 2 == 0 ? 1.0f : 0.0f, z), XMFLOAT3(0, i % 2 == 0 ? 3.1416f : 0, 0), md3dDevice));
         if (i % 40 == 0)
         {
             x = -20;
