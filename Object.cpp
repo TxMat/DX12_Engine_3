@@ -12,7 +12,7 @@ void Object::Update(const GameTimer& gt)
     mObjectCB->CopyData(0, objConstants);
 }
 
-Object::Object(Mesh* mesh, Shader& shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
+Object::Object(Mesh* mesh, Shader* shader, XMFLOAT3 startPos, XMFLOAT3 startRot, ComPtr<ID3D12Device> md3dDevice) : mMesh(mesh), mShader(shader)
 {
     mTransform = Transform();
     mTransform.TranslateWorld(startPos.x, startPos.y, startPos.z);
@@ -34,11 +34,11 @@ void Object::Draw(ComPtr<ID3D12GraphicsCommandList> mCommandList, D3D12_GPU_VIRT
 
     mCommandList->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    mCommandList->SetGraphicsRootSignature(mShader.mRootSignature.Get());
+    mCommandList->SetGraphicsRootSignature(mShader->mRootSignature.Get());
     mCommandList->SetGraphicsRootConstantBufferView(0, mObjectCB->Resource()->GetGPUVirtualAddress());
     mCommandList->SetGraphicsRootConstantBufferView(1, add);
 
-    mCommandList->SetPipelineState(mShader.mPSO.Get());
+    mCommandList->SetPipelineState(mShader->mPSO.Get());
 
     // End
     mCommandList->DrawIndexedInstanced(mMesh->mGeometry->DrawArgs["Geometry"].IndexCount, 1, 0, 0, 0);

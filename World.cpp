@@ -70,9 +70,8 @@ private:
 
     POINT mLastMousePos;
     Transform mCameraTransform;
-
-    //Mesh mMesh;
-    Shader mShader;
+    
+    vector<Shader*> mShaders;
 
     vector<Object*> mObjects;
     map<string, Mesh*> mMeshes;
@@ -394,8 +393,8 @@ void BoxApp::BuildMeshes()
 }
 void BoxApp::BuildShaders()
 {
-    mShader = Shader(L"Shaders\\color.hlsl");
-    mShader.Init(md3dDevice, mBackBufferFormat, m4xMsaaState, m4xMsaaQuality, mDepthStencilFormat);
+    mShaders.push_back(new Shader(L"Shaders\\color.hlsl"));
+    mShaders.back()->Init(md3dDevice, mBackBufferFormat, m4xMsaaState, m4xMsaaQuality, mDepthStencilFormat);
 }
 void BoxApp::BuildObjects()
 {
@@ -408,7 +407,7 @@ void BoxApp::BuildObjects()
     float z = -20;
     for (int i = 1; i <= 1000; i++)
     {
-        mObjects.push_back(new Object(mMeshes["sphere"], mShader, XMFLOAT3(x, i % 2 == 0 ? 1.0f : 0.0f, z), XMFLOAT3(0, i % 2 == 0 ? 3.1416f : 0, 0), md3dDevice));
+        mObjects.push_back(new Object(mMeshes["sphere"], mShaders[0], XMFLOAT3(x, i % 2 == 0 ? 1.0f : 0.0f, z), XMFLOAT3(0, i % 2 == 0 ? 3.1416f : 0, 0), md3dDevice));
         if (i % 40 == 0)
         {
             x = -20;
