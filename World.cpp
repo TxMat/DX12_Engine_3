@@ -114,7 +114,7 @@ bool BoxApp::Initialize()
 
     // Reset the command list to prep for initialization commands.
     ThrowIfFailed(mCommandList->Reset(mDirectCmdListAlloc.Get(), nullptr));
-
+    
     BuildDescriptorHeaps();
     BuildConstantBuffers();
 
@@ -332,8 +332,8 @@ void BoxApp::BuildShaders()
 }
 void BoxApp::BuildObjects()
 {
-    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 2.0f), md3dDevice));
-    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 2.0f), md3dDevice));
-    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 0.0f), md3dDevice));
-    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 0.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-2.5f, -1.0f, 4.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, -1.0f, 4.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, -1.0f, 1.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-2.5f, -1.0f, 1.0f), md3dDevice));
 }
