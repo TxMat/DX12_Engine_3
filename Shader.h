@@ -14,7 +14,7 @@ class Shader
 {
 public:
     Shader();
-    Shader(const std::wstring& vertexShaderPath, const std::wstring& pixelShaderPath);
+    Shader(const std::wstring& ShaderPath);
     ~Shader();
 
     ComPtr<ID3DBlob> GetVSByteCode() const;

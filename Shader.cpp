@@ -4,10 +4,10 @@ Shader::Shader()
 {
 }
 
-Shader::Shader(const std::wstring& vertexShaderPath, const std::wstring& pixelShaderPath)
+Shader::Shader(const std::wstring& ShaderPath)
 {
-    mVSByteCode = d3dUtil::CompileShader(vertexShaderPath, nullptr, "VS", "vs_5_0");
-    mPSByteCode = d3dUtil::CompileShader(pixelShaderPath, nullptr, "PS", "ps_5_0");
+    mVSByteCode = d3dUtil::CompileShader(ShaderPath, nullptr, "VS", "vs_5_0");
+    mPSByteCode = d3dUtil::CompileShader(ShaderPath, nullptr, "PS", "ps_5_0");
 
     // Initialize mPSO and mRootSignature here
 }

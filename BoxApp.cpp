@@ -206,7 +206,7 @@ void BoxApp::Draw(const GameTimer& gt)
                                                                            D3D12_RESOURCE_STATE_RENDER_TARGET));
 
     // Clear the back buffer and depth buffer.
-    mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::LightSteelBlue, 0, nullptr);
+    mCommandList->ClearRenderTargetView(CurrentBackBufferView(), Colors::IndianRed, 0, nullptr);
     mCommandList->ClearDepthStencilView(DepthStencilView(), D3D12_CLEAR_FLAG_DEPTH | D3D12_CLEAR_FLAG_STENCIL, 1.0f, 0,
                                         0, nullptr);
 
@@ -460,7 +460,7 @@ void BoxApp::BuildMeshes()
 }
 void BoxApp::BuildShaders()
 {
-    mShader = Shader(L"Shaders\\color.hlsl", L"Shaders\\color.hlsl");
+    mShader = Shader(L"Shaders\\color.hlsl");
     mShader.Init(md3dDevice, mBackBufferFormat, m4xMsaaState, m4xMsaaQuality, mDepthStencilFormat);
 }
 void BoxApp::BuildObjects()
