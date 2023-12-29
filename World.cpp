@@ -336,9 +336,13 @@ void BoxApp::BuildSphereMeshes()
             float x = r * sinf(theta);
             float z = r * cosf(theta);
 
-            float red = (float)i / stackCount;
-            float green = (float)j / sliceCount;
-            float blue = 1.0f - red;
+            // float red = (float)i / stackCount;
+            // float green = (float)j / sliceCount;
+            // float blue = 1.0f - red;
+
+            float red = rand() % 1000 / 1000.0f;
+            float green = rand() % 1000 / 1000.0f;
+            float blue = rand() % 1000 / 1000.0f;
 
             Vertex v;
             v.Pos = XMFLOAT3(x, y, z);
