@@ -135,7 +135,7 @@ bool BoxApp::Initialize()
     BuildDescriptorHeaps();
     BuildConstantBuffers();
 
-    //BuildMeshes();
+    BuildMeshes();
     BuildSphereMeshes();
     BuildShaders();
     BuildObjects();
@@ -415,7 +415,17 @@ void BoxApp::BuildObjects()
     float z = -20;
     for (int i = 1; i <= 1000; i++)
     {
-        mObjects.push_back(new Object(mMeshes["sphere"], mShaders[0], XMFLOAT3(x, i % 2 == 0 ? 1.0f : 0.0f, z), XMFLOAT3(0, i % 2 == 0 ? 3.1416f : 0, 0), md3dDevice));
+        if (i % 2 == 0)
+        {
+            mObjects.push_back(new Object(mMeshes["sphere"], mShaders[0], XMFLOAT3(x, 1.0f, z), XMFLOAT3(0, 0, 0), md3dDevice));
+        }
+        else
+        {
+            mObjects.push_back(new Object(mMeshes["holy_prism"], mShaders[0], XMFLOAT3(x, 0.0f, z), XMFLOAT3(0, 0, 0), md3dDevice));
+            mObjects.push_back(new Object(mMeshes["holy_prism"], mShaders[0], XMFLOAT3(x, 2.0f, z), XMFLOAT3(0, 3.1416f, 0), md3dDevice));
+        }
+
+        
         if (i % 40 == 0)
         {
             x = -20;
