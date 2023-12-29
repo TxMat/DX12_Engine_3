@@ -318,8 +318,8 @@ void BoxApp::BuildSphereMeshes()
 {
     // build a sphere
     float radius = 1.0f;
-    int sliceCount = 20;
-    int stackCount = 20;
+    int sliceCount = 200;
+    int stackCount = 200;
 
     vector<Vertex> vertices;
     vector<std::uint16_t> indices;
