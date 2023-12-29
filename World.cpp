@@ -64,10 +64,8 @@ private:
 
     Mesh mMesh;
     Shader mShader;
-    Object* mObject1;
-    Object* mObject2;
-    Object* mObject3;
-    Object* mObject4;
+
+    vector<Object*> mObjects;
 };
 
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE prevInstance,
@@ -100,10 +98,13 @@ BoxApp::BoxApp(HINSTANCE hInstance)
 
 BoxApp::~BoxApp()
 {
-    delete mObject1;
-    delete mObject2;
-    delete mObject3;
-    delete mObject4;
+    if (md3dDevice != nullptr)
+        FlushCommandQueue();
+
+    for (auto& object : mObjects)
+    {
+        delete object;
+    }
 }
 
 bool BoxApp::Initialize()
@@ -165,10 +166,10 @@ void BoxApp::Update(const GameTimer& gt)
     XMStoreFloat4x4(&objConstants.WorldViewProj, XMMatrixTranspose(viewProj));
     mViewCB->CopyData(0, objConstants);
 
-    mObject1->Update(gt);
-    mObject2->Update(gt);
-    mObject3->Update(gt);
-    mObject4->Update(gt);
+    for (auto& object : mObjects)
+    {
+        object->Update(gt);
+    }
 }
 
 void BoxApp::Draw(const GameTimer& gt)
@@ -200,10 +201,10 @@ void BoxApp::Draw(const GameTimer& gt)
     ID3D12DescriptorHeap* descriptorHeaps[] = {mCbvHeap.Get()};
     mCommandList->SetDescriptorHeaps(_countof(descriptorHeaps), descriptorHeaps);
 
-    mObject1->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
-    mObject2->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
-    mObject3->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
-    mObject4->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+    for (auto& object : mObjects)
+    {
+        object->Draw(mCommandList, mViewCB->Resource()->GetGPUVirtualAddress());
+    }
 
     // Indicate a state transition on the resource usage.
     mCommandList->ResourceBarrier(1, &CD3DX12_RESOURCE_BARRIER::Transition(CurrentBackBuffer(),
@@ -331,8 +332,8 @@ void BoxApp::BuildShaders()
 }
 void BoxApp::BuildObjects()
 {
-    mObject1 = new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 2.0f), md3dDevice);
-    mObject2 = new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 2.0f), md3dDevice);
-    mObject3 = new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 0.0f), md3dDevice);
-    mObject4 = new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 0.0f), md3dDevice);
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 2.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 2.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(0.5f, 0.0f, 0.0f), md3dDevice));
+    mObjects.push_back(new Object(mMesh, mShader, XMFLOAT3(-1.5f, 0.0f, 0.0f), md3dDevice));
 }
